@@ -14,7 +14,7 @@
   src: url('../../assets/fonts/VT323-Regular.ttf') format('woff');
 }
 
-body { padding: 0; margin: 0; font-family: 'VT323', Helvetica, Arial, sans-serif; font-size: .9em; color: #333; }
+body { background: #efefef url('../../assets/bg.png'); padding: 0; margin: 0; font-family: 'VT323', Helvetica, Arial, sans-serif; font-size: .9em; color: #333; }
 
 /* canvas */
 canvas { background: #fff; cursor: crosshair; }
