@@ -53,7 +53,6 @@ $(function(){
 		$canvas = $("#canvas");
 		ctx = $canvas[0].getContext("2d");
 		$canvas.click(generatepixel);
-		$canvas.mousemove()
 	}
 	
 

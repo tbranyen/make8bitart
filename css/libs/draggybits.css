@@ -6,7 +6,7 @@
 .draggy.ui-hidden { display: none;}
 
 /** controls **/
-.draggy .controls img { float:right; padding:5px; }
+.draggy .controls img { float:right; }
 .draggy .controls img.ui-dragger { cursor:move; }		
 .draggy .controls img.ui-closer { cursor:pointer; }		
 .draggy .controls img.ui-hider { cursor:pointer; }	
