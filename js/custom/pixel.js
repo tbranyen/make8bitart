@@ -35,6 +35,8 @@ $(function(){
 	
 	$('.button.color').click(function() {
 		pixel.color = $(this).attr('title');
+		
+		$('.draggy').css('box-shadow','5px 5px 0 ' + $(this).attr('title'));
 	});
 	
 	
