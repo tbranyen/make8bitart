@@ -1,0 +1,36 @@
+body { padding: 0; margin: 0; font-family: Helvetica, Arial, sans-serif; font-size: .9em; color: #333; }
+
+/* canvas */
+canvas { background: #fff; cursor: crosshair; }
+	
+/* draggy "plugin" */
+.draggy { padding: 10px; box-shadow: 5px 5px 0 #000; border: 1px solid #000; }
+
+/* toolbox */
+#toolbox { background: #fff; width: 145px; top: 20px; right: 20px; }
+.button { display: block; float: left; background: #efefef; border: 2px solid rgba(255,255,255,.5); margin: 5px 10px 5px 0; padding: 3px 6px; color: #333; cursor: pointer; width: 40px; text-align: center; font-weight: normal; }
+.button.save { float:none; width: 75px; }
+.button:hover { background: #ddd; }
+.button.color { background: #fff; border: 5px solid none; width: 35px; height: 35px; padding: 0; margin: 4px; }
+.button.color.red { background: red; }
+.button.color.orange { background: orange; }
+.button.color.yellow { background: yellow; }
+.button.color.green { background: green; }
+.button.color.blue { background: blue; }
+.button.color.purple { background: purple; }
+.button.color.black { background: black; }
+.button.color.gray { background: gray; }
+.button.color.white { background: white; }	
+.button.color.custom { margin: 5px 0 0 8px; border-color: #ddd; }
+.button.color.current, .button.current, .button.custom.current{ border: 5px solid #333; margin: 1px;}
+.button.brush.current { margin: 1px 8px 1px 0;}
+.button.custom.current { margin: 5px 0 0 8px; border: 2px solid #333;}
+
+/* info */
+#info { background: #b9c630; width: 300px; top: 200px; right: 300px; }
+
+/* clearfix */
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix { display: inline-block; }
+html[xmlns] .clearfix { display: block; }
+* html .clearfix { height: 1%; }
