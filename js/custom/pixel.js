@@ -26,7 +26,6 @@ $(function(){
 	/**
 	* Toolbox
 	*/
-	var brushColor = "erase";	
 	
 	$color.click(function(){
 		$color.removeClass('current');
@@ -55,7 +54,7 @@ $(function(){
 		$canvas = $("#canvas");
 		ctx = $canvas[0].getContext("2d");
 		$canvas.click(generatepixel);
-	}
+	};
 	
 
 	
@@ -71,32 +70,17 @@ $(function(){
 			yPos = e.clientY;
 	    }
 	    
-	    calculatePosition(xPos,yPos);
-		
-		/*coefficient = (xPos-pixel.sideLength)/width;
-		if ( coefficient % 2 != 0 ) {
-			yPos += height / 2;
-		} 
-		
-		xPos -= coefficient * (width / 4);
-	*/
 	
 		ctx.beginPath();
-		ctx.moveTo (xPos + pixel.sideLength * Math.cos(0), yPos +  pixel.sideLength *  Math.sin(0));          
-		for (var i = 1; i <= 6; i += 1) {
-		    ctx.lineTo (xPos + pixel.sideLength * Math.cos(i * 2 * Math.PI / 6), yPos + pixel.sideLength * Math.sin(i * 2 * Math.PI / 6));
-		}	
+		    
+	    xPos = ( Math.ceil(xPos/25) * 25 ) - 25;
+	    yPos = ( Math.ceil(yPos/25) * 25 ) - 25;
+		ctx.moveTo (xPos, yPos);          
 		ctx.fillStyle = pixel.color;
 		ctx.lineHeight = 0;
-		ctx.fill();	
-	}
+		ctx.fillRect(xPos,yPos,25,25);
 	
-	var calculatePosition = function(x,y) {
-		
-		/*xPos = ( Math.ceil(xPos/pixel.width) * pixel.width ) - (pixel.sideLength) ;
-	    yPos = ( Math.ceil(yPos/pixel.height) * pixel.height ) - (pixel.sideLength) ;
-		*/
-	}
+	};
 	
 	
 	/* Init */
