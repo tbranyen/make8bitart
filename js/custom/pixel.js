@@ -4,6 +4,15 @@ $(function(){
 	var $body = $('body');
 	var $color = $('.color');
 	var $toolbox = $('#toolbox');
+	var $savebox = $('#savebox');
+	var $draggydivs = $('.draggy');
+	
+	var saveMode = {
+		on : false,
+		instructOne : $('.step-one').hide(),
+		instructTwo : $('.step-two').hide(),
+		instructThree : $('.step-three').hide()
+	}
 	
 	var windowCanvas = {
 		height: $window.height(),
@@ -15,12 +24,13 @@ $(function(){
 	};
 	
 	
-	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart;
+	var $canvas, ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection;
 
 	/**
 	* DraggyBits plugin
 	*/
-	$('.draggy').draggyBits();
+	
+	$draggydivs.draggyBits();
 
 	
 	/**
@@ -28,14 +38,42 @@ $(function(){
 	*/
 	
 	$color.click(function(){
+		
+		var $newColor = $(this);
+		var newColorLabel = $newColor.attr('title');
+		
 		$color.removeClass('current');
-		$(this).addClass('current');
+		$newColor.addClass('current');
+		pixel.color = newColorLabel;
+		
+		$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
+		
 	});
 	
-	$('.button.color').click(function() {
-		pixel.color = $(this).attr('title');
-		
-		$('.draggy').css('box-shadow','5px 5px 0 ' + $(this).attr('title'));
+	$toolbox.css({
+		'left' : '20px',
+		'top' : '20px'
+	});
+	
+	
+	/**
+	* Savebox 
+	*/
+	
+	$('#save-full').click(function(){
+		var savedPNG = $canvas[0].toDataURL("image/png");
+		window.open(savedPNG,'_blank');
+		console.log($canvas);
+	});
+	
+	$('#save-selection').click(function(){
+		saveMode.on = true;
+		saveMode.instructOne.fadeIn();
+	});
+	
+	$savebox.css({
+		'left' : '800px',
+		'top' : '20px'
 	});
 	
 	
@@ -53,13 +91,30 @@ $(function(){
 	
 		$canvas = $("#canvas");
 		ctx = $canvas[0].getContext("2d");
-		$canvas.click(generatepixel);
+		
+		$canvas.mousedown(function(e){
+			if ( saveMode.on == false ) {
+				generatePixel(e);
+			}
+			else {
+				startSaveSelection(e);
+			}
+		});
+		
+		$canvas.mouseup(function(e){
+			if ( saveMode.on == false ) {
+				return;
+			}
+			else {
+				generateSaveSelection(e);
+			}
+		});
 	};
 	
 
 	
 	// draw pixels
-	var generatepixel = function(e) {
+	var generatePixel = function(e) {
 	
 		if (e.pageX != undefined && e.pageY != undefined) {
 			xPos = e.pageX;
@@ -69,7 +124,6 @@ $(function(){
 			xPos = e.clientX;
 			yPos = e.clientY;
 	    }
-	    
 	
 		ctx.beginPath();
 		    
@@ -81,6 +135,22 @@ $(function(){
 		ctx.fillRect(xPos,yPos,25,25);
 	
 	};
+	
+	var startSaveSelection = function(e) {
+		saveSelection = {
+			startX : e.pageX,
+			startY : e.pageY 
+		};
+	};
+	
+	var generateSaveSelection = function(e) {
+		saveSelection.endX = e.pageX;
+		saveSelection.endY = e.pageY;
+		
+		console.log(saveSelection);
+		saveMode.on = false;
+		$('.instructions li').hide();	
+	}
 	
 	
 	/* Init */

@@ -52,8 +52,8 @@
 				numDraggers++;
 
 				var css = {
-					top : numDraggers * tileOffset.y,
-					left : 200 + (numDraggers * tileOffset.x),
+					//top : numDraggers * tileOffset.y,
+					//left : 200 + (numDraggers * tileOffset.x),
 					position : 'absolute'
 				};
 

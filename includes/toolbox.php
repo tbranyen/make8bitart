@@ -1,9 +1,7 @@
 <div id="toolbox" class="draggy" title="Art Tools">
 
 	<div class="controls">
-		<img class="ui-dragger" src="assets/draggybits/dragger.png">
-		<!--<img class="ui-hider" src="http://dummyimage.com/25x25/afa/000&amp;text=_">
-		<img class="ui-closer" src="http://dummyimage.com/25x25/faa/000&amp;text=X">-->		
+		<img class="ui-dragger" src="assets/draggybits/dragger.png">	
 	</div>
 	
 	<div id="color" class="inner">

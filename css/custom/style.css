@@ -20,10 +20,10 @@ body { background: #efefef url('../../assets/bg.png'); padding: 0; margin: 0; fo
 canvas { background: #fff; cursor: crosshair; }
 	
 /* draggy "plugin" */
-.draggy { padding: 10px; box-shadow: 5px 5px 0 #000; border: 1px solid #000; }
+.draggy { padding: 10px; box-shadow: 5px 5px 0 #000; border: 1px solid #000; background: #fffff3; }
 
 /* toolbox */
-#toolbox { background: #fff; width: 145px; top: 20px; right: 20px; }
+#toolbox { width: 145px; top: 20px; left: 600px; }
 .button { display: block; float: left; background: #efefef; border: 2px solid rgba(255,255,255,.5); margin: 5px 10px 5px 0; padding: 3px 6px; color: #333; cursor: pointer; width: 40px; text-align: center; font-weight: normal; }
 .button.save { float:none; width: 75px; }
 .button:hover { background: #ddd; }
@@ -41,6 +41,9 @@ canvas { background: #fff; cursor: crosshair; }
 .button.color.current, .button.current, .button.custom.current{ border: 5px solid #333; margin: 1px;}
 .button.brush.current { margin: 1px 8px 1px 0;}
 .button.custom.current { margin: 5px 0 0 8px; border: 2px solid #333;}
+
+/* savebox */
+#savebox { width: 145; top: 400px; left: 600px; }
 
 /* info */
 #info { background: #b9c630; width: 300px; top: 200px; right: 300px; }
