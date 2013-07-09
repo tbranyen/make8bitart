@@ -19,6 +19,10 @@ $(function(){
 		width: $window.width(),
 	};
 	
+	var classes = {
+		selectionCanvas : 'selectionCanvas',
+	};
+	
 	var pixel = {
 		color: '#9cc',
 	};
@@ -63,7 +67,6 @@ $(function(){
 	$('#save-full').click(function(){
 		var savedPNG = $canvas[0].toDataURL("image/png");
 		window.open(savedPNG,'_blank');
-		console.log($canvas);
 	});
 	
 	$('#save-selection').click(function(){
@@ -146,11 +149,35 @@ $(function(){
 	var generateSaveSelection = function(e) {
 		saveSelection.endX = e.pageX;
 		saveSelection.endY = e.pageY;
-		
-		console.log(saveSelection);
+
 		saveMode.on = false;
-		$('.instructions li').hide();	
-	}
+		$('.instructions li').hide();
+		
+		generateSelectionCanvas(saveSelection);
+	};
+	
+	var generateSelectionCanvas = function(coords) {
+		
+		$body.append('<canvas id="' + classes.selectionCanvas + '">Your browser doesn\'t support canvas. Boo-hiss.</canvas>');
+
+		var tempCanvas = $('<canvas id="' + classes.selectionCanvas + '">');
+		
+        var tCtx = tempCanvas[0].getContext("2d");
+
+	    var width = coords.endX - coords.startX;
+	    var height = coords.endY - coords.startY;
+	    
+	    console.log(width + ' ' + height);
+		tempCanvas[0].width = width;
+		tempCanvas[0].height = height;
+		tCtx.drawImage($canvas[0],coords.startX, coords.startY, width, height, 0, 0, width, height);
+	
+	    // write on screen
+	    var img = tempCanvas[0].toDataURL("image/png");
+	    console.log(img);
+	    window.open(img,'_blank');
+		
+	};
 	
 	
 	/* Init */
@@ -167,7 +194,7 @@ $(function(){
 		pixel.edge = Math.sin(30 * rad) * pixel.sideLength;
 		pixel.period = pixel.width - pixel.edge;
 
-		console.log(pixel);
+		//console.log(pixel);
 	};
 	
 	var init = (function(size){
