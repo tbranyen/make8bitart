@@ -16,5 +16,11 @@
 		<a class="button color primary gray" title="gray" /> </a>
 		<a class="button color primary white" title="white" /> </a>
 	</div>
+	
+	<div id="clear" class="inner clearfix">
+		<h3>clear canvas:</h3>
+		<input type="submit" value="white bg" id="clear-white" />
+		<input type="submit" value="transparent bg" id="clear-transparent" />
+	</div>
 
 </div>

@@ -5,6 +5,8 @@
 	</div>
 	
 	<div id="save" class="inner">
+	
+		don't resize your window, because the canvas won't resize.
 		<h3>save your art:</h3>
 		
 		<input type="submit" value="full page" id="save-full" />

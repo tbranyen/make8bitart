@@ -135,7 +135,7 @@
 			return;
 		}
 
-		e.preventDefault()
+		e.preventDefault();
 		pos = { x: e.pageX, y: e.pageY };
 		zIndex++;
 

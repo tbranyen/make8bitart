@@ -17,6 +17,7 @@ $(function(){
 	var windowCanvas = {
 		height: $window.height(),
 		width: $window.width(),
+		background: 'url("assets/bg.png")'
 	};
 	
 	var classes = {
@@ -92,26 +93,9 @@ $(function(){
 						'" height="' + windowCanvas.height + 
 						'">Your browser doesn\'t support canvas. Boo-hiss.</canvas>');
 	
-		$canvas = $("#canvas");
+		$canvas = $("#canvas").css('background',windowCanvas.background);
 		ctx = $canvas[0].getContext("2d");
 		
-		$canvas.mousedown(function(e){
-			if ( saveMode.on == false ) {
-				generatePixel(e);
-			}
-			else {
-				startSaveSelection(e);
-			}
-		});
-		
-		$canvas.mouseup(function(e){
-			if ( saveMode.on == false ) {
-				return;
-			}
-			else {
-				generateSaveSelection(e);
-			}
-		});
 	};
 	
 
@@ -179,6 +163,15 @@ $(function(){
 		
 	};
 	
+	var resetCanvas = function(background) {
+		ctx.clearRect(0, 0, $canvas.width(), $canvas.height());	
+		
+		if ( background ) {
+			ctx.fillStyle = background;
+		}
+		ctx.fillRect(0,0,$canvas.width(),$canvas.height());
+	};
+	
 	
 	/* Init */
 	
@@ -203,7 +196,38 @@ $(function(){
 		initpixel(size);
 
 	}(16));
+	
+	
+	/* Event Handlers */
 
+	$canvas.mousedown(function(e){
+		e.preventDefault()
+
+		if ( saveMode.on == false ) {
+			generatePixel(e);
+		}
+		else {
+			startSaveSelection(e);
+		}
+	});
+	
+	$canvas.mouseup(function(e){
+		if ( saveMode.on == false ) {
+			return;
+		}
+		else {
+			generateSaveSelection(e);
+		}
+	});
+	
+	$('#clear-white').click(function(){
+		resetCanvas('#fff');
+	});
+	
+	$('#clear-transparent').click(function(){
+		resetCanvas('none');
+	});
+	
 
 });
 
