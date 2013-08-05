@@ -5,8 +5,18 @@ $(function(){
 	var $color = $('.color');
 	var $toolbox = $('#toolbox');
 	var $savebox = $('#savebox');
+	var $colorbox = $('#colorbox');
+	var $clearWhiteBG = $('#clear-white');
+	var $clearTransparentBG = $('#clear-transparent');
+	var $buttonSaveFull = $('#save-full');
+	var $buttonSaveSelection = $('#save-selection');
+	var $sliderSize = $('#size-slider');
+	var $pixelDemoDiv = $('#pixel-size-demo');
+	var $pixelDemoNumber = $('#pixel-size-number');
 	var $draggydivs = $('.draggy');
-	
+	var isDrawing = false;
+	var $canvas, ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection;
+
 	var saveMode = {
 		on : false,
 		instructOne : $('.step-one').hide(),
@@ -25,66 +35,34 @@ $(function(){
 	};
 	
 	var pixel = {
-		color: '#9cc',
+		color: '#000',
+		size: 25
 	};
 	
 	
-	var $canvas, ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection;
+	
 
-	/**
-	* DraggyBits plugin
-	*/
+	/*** OUTSIDE LIBRARY STUFF ***/
 	
 	$draggydivs.draggyBits();
 
-	
-	/**
-	* Toolbox
-	*/
-	
-	$color.click(function(){
-		
-		var $newColor = $(this);
-		var newColorLabel = $newColor.attr('title');
-		
-		$color.removeClass('current');
-		$newColor.addClass('current');
-		pixel.color = newColorLabel;
-		
-		$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
-		
-	});
-	
 	$toolbox.css({
 		'left' : '20px',
 		'top' : '20px'
 	});
-	
-	
-	/**
-	* Savebox 
-	*/
-	
-	$('#save-full').click(function(){
-		var savedPNG = $canvas[0].toDataURL("image/png");
-		window.open(savedPNG,'_blank');
-	});
-	
-	$('#save-selection').click(function(){
-		saveMode.on = true;
-		saveMode.instructOne.fadeIn();
-	});
-	
+
 	$savebox.css({
 		'left' : '800px',
 		'top' : '20px'
 	});
 	
+	$colorbox.css({
+		'left' : '300px',
+		'top' : '100px'
+	});
 	
 	
-	/**
-	* Functions
-	*/
+	/*** LET'S MAKE SOME EFFING ART ***/
 	
 	// generate window-sized canvas
 	var generateCanvas = function(){
@@ -98,11 +76,8 @@ $(function(){
 		
 	};
 	
-
-	
 	// draw pixels
-	var generatePixel = function(e) {
-	
+	var drawPixel = function(e) {
 		if (e.pageX != undefined && e.pageY != undefined) {
 			xPos = e.pageX;
 			yPos = e.pageY;
@@ -112,17 +87,17 @@ $(function(){
 			yPos = e.clientY;
 	    }
 	
-		ctx.beginPath();
-		    
-	    xPos = ( Math.ceil(xPos/25) * 25 ) - 25;
-	    yPos = ( Math.ceil(yPos/25) * 25 ) - 25;
+		ctx.beginPath();  
+	    xPos = ( Math.ceil(xPos/pixel.size) * pixel.size ) - pixel.size;
+	    yPos = ( Math.ceil(yPos/pixel.size) * pixel.size ) - pixel.size;
 		ctx.moveTo (xPos, yPos);          
 		ctx.fillStyle = pixel.color;
 		ctx.lineHeight = 0;
-		ctx.fillRect(xPos,yPos,25,25);
+		ctx.fillRect(xPos,yPos,pixel.size,pixel.size);
 	
 	};
 	
+	// start save selection mode
 	var startSaveSelection = function(e) {
 		saveSelection = {
 			startX : e.pageX,
@@ -130,16 +105,19 @@ $(function(){
 		};
 	};
 	
+	// get position data of selection
 	var generateSaveSelection = function(e) {
 		saveSelection.endX = e.pageX;
 		saveSelection.endY = e.pageY;
 
-		saveMode.on = false;
-		$('.instructions li').hide();
-		
 		generateSelectionCanvas(saveSelection);
+		
+		// turn off save mode and directions
+		saveMode.on = false;
+		$('.instructions li').hide();	
 	};
 	
+	// generate image from save selection
 	var generateSelectionCanvas = function(coords) {
 		
 		$body.append('<canvas id="' + classes.selectionCanvas + '">Your browser doesn\'t support canvas. Boo-hiss.</canvas>');
@@ -151,14 +129,12 @@ $(function(){
 	    var width = coords.endX - coords.startX;
 	    var height = coords.endY - coords.startY;
 	    
-	    console.log(width + ' ' + height);
 		tempCanvas[0].width = width;
 		tempCanvas[0].height = height;
 		tCtx.drawImage($canvas[0],coords.startX, coords.startY, width, height, 0, 0, width, height);
 	
 	    // write on screen
 	    var img = tempCanvas[0].toDataURL("image/png");
-	    console.log(img);
 	    window.open(img,'_blank');
 		
 	};
@@ -173,61 +149,98 @@ $(function(){
 	};
 	
 	
-	/* Init */
+	/*** INITIALIZE ***/
 	
 	var initpixel = function(size) {
-		
-		var sqrt3 = Math.sqrt(3);
-		var rad = Math.PI/180;
-
-		pixel.sideLength = size;
-		pixel.apothem = Math.cos(30 * rad) * pixel.sideLength;		
-		pixel.height = Math.sqrt(3) * pixel.sideLength;
-		pixel.width = 2 * pixel.sideLength;
-		pixel.edge = Math.sin(30 * rad) * pixel.sideLength;
-		pixel.period = pixel.width - pixel.edge;
-
-		//console.log(pixel);
+		pixel.size = size;
+		$pixelDemoDiv.css({
+			'width' : pixel.size,
+			'height': pixel.size
+		});
+		$pixelDemoNumber.text(pixel.size);
 	};
 	
 	var init = (function(size){
-	
 		generateCanvas();
 		initpixel(size);
-
-	}(16));
+	}(25));
 	
 	
-	/* Event Handlers */
 
-	$canvas.mousedown(function(e){
-		e.preventDefault()
-
+	/*** EVENT HANDLERS ***/
+	
+	// mouse down drawing or saving
+	var onMouseDown = function(e) {
+		e.preventDefault();
 		if ( saveMode.on == false ) {
-			generatePixel(e);
+			drawPixel(e);
+			$canvas.on('mousemove', drawPixel);
+			isDrawing = true;
 		}
 		else {
 			startSaveSelection(e);
 		}
-	});
+	};
 	
-	$canvas.mouseup(function(e){
+	// mouse up drawing or saving
+	var onMouseUp = function(e) {
 		if ( saveMode.on == false ) {
-			return;
+			$canvas.off('mousemove');
+			isDrawing = false;
 		}
 		else {
 			generateSaveSelection(e);
 		}
-	});
+	};
 	
-	$('#clear-white').click(function(){
+	// bind mousedown and mouseup to canvas
+	$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
+	
+	// reset canvas based on white or transparent button clicked
+	$clearWhiteBG.click(function(){
 		resetCanvas('#fff');
 	});
 	
-	$('#clear-transparent').click(function(){
+	$clearTransparentBG.click(function(){
 		resetCanvas('none');
 	});
 	
+	// color chosen
+	$color.click(function(){
+		var $newColor = $(this);
+		var newColorLabel = $newColor.attr('title');
+		
+		$color.removeClass('current');
+		$newColor.addClass('current');
+		pixel.color = newColorLabel;
+		$pixelDemoDiv.css('background', pixel.color);
+		$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
+	});
+	
+	// save full canvas button clicked
+	$buttonSaveFull.click(function(){
+		var savedPNG = $canvas[0].toDataURL("image/png");
+		window.open(savedPNG,'_blank');
+	});
+	
+	// save selection of canvas button clicked
+	$buttonSaveSelection.click(function(){
+		saveMode.on = true;
+		saveMode.instructOne.fadeIn();
+	});
+
+	// pixel size slider changed
+	$sliderSize.change(function(){
+		pixel.size = $(this).val();
+		
+		$pixelDemoDiv.css({
+			'width' : pixel.size,
+			'height': pixel.size,
+		});
+		
+		$pixelDemoNumber.text(pixel.size);
+	});
+
 
 });
 

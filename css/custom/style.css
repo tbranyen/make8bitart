@@ -22,8 +22,12 @@ canvas { background: #fff; cursor: crosshair; }
 /* draggy "plugin" */
 .draggy { padding: 10px; box-shadow: 5px 5px 0 #000; border: 1px solid #000; background: #fffff3; }
 
-/* toolbox */
-#toolbox { width: 145px; top: 20px; left: 600px; }
+/* canvas tools box */
+#toolbox { width: 145px; }
+#pixel-size-demo { background: black; }
+
+/* color palette box */
+#colorbox { width: 145px; }
 .button { display: block; float: left; background: #efefef; border: 2px solid rgba(255,255,255,.5); margin: 5px 10px 5px 0; padding: 3px 6px; color: #333; cursor: pointer; width: 40px; text-align: center; font-weight: normal; }
 .button.save { float:none; width: 75px; }
 .button:hover { background: #ddd; }
@@ -42,11 +46,11 @@ canvas { background: #fff; cursor: crosshair; }
 .button.brush.current { margin: 1px 8px 1px 0;}
 .button.custom.current { margin: 5px 0 0 8px; border: 2px solid #333;}
 
-/* savebox */
-#savebox { width: 145; top: 400px; left: 600px; }
+/* save box */
+#savebox { width: 145; }
 
 /* info */
-#info { background: #b9c630; width: 300px; top: 200px; right: 300px; }
+#info { background: #b9c630; width: 300px; }
 
 /* clearfix */
 .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
