@@ -32,6 +32,7 @@ canvas { background: #fff; cursor: crosshair; }
 .button.save { float:none; width: 75px; }
 .button:hover { background: #ddd; }
 .button.color { background: #fff; border: 5px solid none; width: 35px; height: 35px; padding: 0; margin: 4px; }
+
 .button.color.red { background: red; }
 .button.color.orange { background: orange; }
 .button.color.yellow { background: yellow; }
@@ -41,10 +42,13 @@ canvas { background: #fff; cursor: crosshair; }
 .button.color.black { background: black; }
 .button.color.gray { background: gray; }
 .button.color.white { background: white; border: 2px solid rgba(0,0,0,.25); }	
-.button.color.custom { margin: 5px 0 0 8px; border-color: #ddd; }
+
+.button.color.favorite { background: #339999; }
+.button.color.custom { background: url('../../assets/colorful.png'); }
+.button.color.transparent { border-color: #ccc; background: url('../../assets/bg.png'); }
+
 .button.color.current, .button.current, .button.custom.current{ border: 5px solid #333; margin: 1px;}
 .button.brush.current { margin: 1px 8px 1px 0;}
-.button.custom.current { margin: 5px 0 0 8px; border: 2px solid #333;}
 
 /* save box */
 #savebox { width: 145; }

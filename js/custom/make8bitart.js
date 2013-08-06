@@ -15,6 +15,8 @@ $(function(){
 	var $pixelDemoNumber = $('#pixel-size-number');
 	var $draggydivs = $('.draggy');
 	var isDrawing = false;
+	var colorJennsPick = $('.button.color.favorite').css('background-color');
+
 	var $canvas, ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection;
 
 	var saveMode = {
@@ -93,7 +95,13 @@ $(function(){
 		ctx.moveTo (xPos, yPos);          
 		ctx.fillStyle = pixel.color;
 		ctx.lineHeight = 0;
-		ctx.fillRect(xPos,yPos,pixel.size,pixel.size);
+
+		if ( pixel.color == 'erase' ) {
+			ctx.clearRect(xPos,yPos,pixel.size,pixel.size);
+		}
+		else {
+			ctx.fillRect(xPos,yPos,pixel.size,pixel.size);
+		}
 	
 	};
 	
@@ -208,7 +216,13 @@ $(function(){
 	// color chosen
 	$color.click(function(){
 		var $newColor = $(this);
-		var newColorLabel = $newColor.attr('title');
+		
+		if ( $newColor.hasClass('favorite') ) {
+			var newColorLabel = colorJennsPick;
+		}
+		else {
+			var newColorLabel = $newColor.attr('title');
+		}
 		
 		$color.removeClass('current');
 		$newColor.addClass('current');

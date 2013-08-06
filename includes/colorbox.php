@@ -15,6 +15,9 @@
 		<a class="button color primary black" title="black" /> </a>
 		<a class="button color primary gray" title="gray" /> </a>
 		<a class="button color primary white" title="white" /> </a>
+		<a class="button color favorite" title="jenn's pick" /> </a>
+		<a class="button color transparent" title="erase" /> </a>
+		<!--<a class="button color custom" title="custom" /> </a>-->
 	</div>
 
 </div>
