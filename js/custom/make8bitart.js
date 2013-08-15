@@ -45,6 +45,10 @@ $(function(){
 		size: 25
 	};
 	
+
+	// overlay stuff
+	var rect = {};
+    var drag = false;
 	
 	
 
@@ -169,6 +173,18 @@ $(function(){
 	    window.open(img,'_blank');
 		
 	};
+
+	var drawSelection = function(e) {
+	if (drag) {
+	    rect.w = (e.pageX - this.offsetLeft) - rect.startX;
+	    rect.h = (e.pageY - this.offsetTop) - rect.startY ;
+	    ctxOverlay.clearRect(0,0,$overlay.width(),$overlay.height());
+	    ctxOverlay.fillRect(rect.startX, rect.startY, rect.w, rect.h);
+	  }
+	  else {
+	  	console.log('nope');
+	  }
+	};
 	
 	var resetCanvas = function(background) {
 		ctx.clearRect(0, 0, $canvas.width(), $canvas.height());	
@@ -210,18 +226,24 @@ $(function(){
 			isDrawing = true;
 		}
 		else {
-			startSaveSelection(e);
+			startSaveSelection(e);			drag = true;
+
+			$overlay.on('mousemove', drawSelection(e));
 		}
 	};
 	
 	// mouse up drawing or saving
 	var onMouseUp = function(e) {
+
 		if ( saveMode.on == false ) {
 			$canvas.off('mousemove');
 			isDrawing = false;
 		}
 		else {
 			generateSaveSelection(e);
+			rect.startX = e.pageX - this.offsetLeft;
+			rect.startY = e.pageY - this.offsetTop;
+			
 		}
 	};
 	
