@@ -6,8 +6,7 @@ $(function(){
 	var $toolbox = $('#toolbox');
 	var $savebox = $('#savebox');
 	var $colorbox = $('#colorbox');
-	var $clearWhiteBG = $('#clear-white');
-	var $clearTransparentBG = $('#clear-transparent');
+	var $clearBG = $('#clear-canvas');
 	var $buttonSaveFull = $('#save-full');
 	var $buttonSaveSelection = $('#save-selection');
 	var $sliderSize = $('#size-slider');
@@ -33,7 +32,7 @@ $(function(){
 	};
 	
 	var classes = {
-		selectionCanvas : 'selectionCanvas',
+		selectionCanvas : 'selectionCanvas'
 	};
 	
 	var pixel = {
@@ -150,10 +149,11 @@ $(function(){
 	var resetCanvas = function(background) {
 		ctx.clearRect(0, 0, $canvas.width(), $canvas.height());	
 		
-		if ( background ) {
+		// only fill background if color given and not transparent
+		if ( background && background != 'erase') {
 			ctx.fillStyle = background;
+			ctx.fillRect(0,0,$canvas.width(),$canvas.height());
 		}
-		ctx.fillRect(0,0,$canvas.width(),$canvas.height());
 	};
 	
 	
@@ -204,13 +204,10 @@ $(function(){
 	// bind mousedown and mouseup to canvas
 	$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
 	
-	// reset canvas based on white or transparent button clicked
-	$clearWhiteBG.click(function(){
-		resetCanvas('#fff');
-	});
-	
-	$clearTransparentBG.click(function(){
-		resetCanvas('none');
+	// reset canvas 
+	$clearBG.click(function(){
+		console.log(pixel.color);
+		resetCanvas( pixel.color );
 	});
 	
 	// color chosen
@@ -227,7 +224,15 @@ $(function(){
 		$color.removeClass('current');
 		$newColor.addClass('current');
 		pixel.color = newColorLabel;
-		$pixelDemoDiv.css('background', pixel.color);
+
+		if ( pixel.color != 'erase' ) {
+			var demoColor = pixel.color;
+		}
+		else {
+			var demoColor = windowCanvas.background;
+		} 
+		$pixelDemoDiv.css('background', demoColor);
+
 		$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
 	});
 	
@@ -249,7 +254,7 @@ $(function(){
 		
 		$pixelDemoDiv.css({
 			'width' : pixel.size,
-			'height': pixel.size,
+			'height': pixel.size
 		});
 		
 		$pixelDemoNumber.text(pixel.size);

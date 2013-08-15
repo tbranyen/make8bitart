@@ -7,8 +7,9 @@
 	<div id="clear" class="inner">
 		<h3>new canvas:</h3>
 		<p><em>this *will* clear the whole page and your art will be gone forever</em></p>
-		<input type="submit" value="white bg" id="clear-white" />
-		<input type="submit" value="transparent bg" id="clear-transparent" />
+		<p>pick a color (or transparent) and that will be the new background</p>
+
+		<input type="submit" value="new canvas" id="clear-canvas" />
 	</div>
 	
 	<div id="size" class="inner">
