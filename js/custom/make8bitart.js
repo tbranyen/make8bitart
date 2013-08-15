@@ -30,6 +30,11 @@ $(function(){
 		width: $window.width(),
 		background: 'url("assets/bg.png")'
 	};
+
+	var copy = {
+		selectionOff : 'turn off selection',
+		selectionOn : 'selection'
+	};
 	
 	var classes = {
 		selectionCanvas : 'selectionCanvas'
@@ -66,14 +71,29 @@ $(function(){
 	/*** LET'S MAKE SOME EFFING ART ***/
 	
 	// generate window-sized canvas
-	var generateCanvas = function(){
+	var generateCanvas = function( isOverlay ){
 
-		$body.prepend('<canvas id="canvas" width="' + windowCanvas.width + 
-						'" height="' + windowCanvas.height + 
-						'">Your browser doesn\'t support canvas. Boo-hiss.</canvas>');
-	
-		$canvas = $("#canvas").css('background',windowCanvas.background);
-		ctx = $canvas[0].getContext("2d");
+		if ( !isOverlay ) {
+			$body.prepend('<canvas id="canvas" width="' + windowCanvas.width + 
+							'" height="' + windowCanvas.height + 
+							'">Your browser doesn\'t support canvas. Boo-hiss.</canvas>');
+		
+			$canvas = $("#canvas").css('background',windowCanvas.background);
+			ctx = $canvas[0].getContext("2d");
+		}
+		else {
+			$body.prepend('<canvas id="overlay" width="' + windowCanvas.width + 
+							'" height="' + windowCanvas.height + 
+							'"></canvas>');
+		
+			$overlay = $("#overlay").css({
+				'background':'rgba(0,0,0,.5)',
+				'position' : 'absolute',
+				'top' : 0,
+				'left' : 0
+			});
+			ctxOverlay = $overlay[0].getContext("2d");
+		}
 		
 	};
 	
@@ -118,6 +138,8 @@ $(function(){
 		saveSelection.endY = e.pageY;
 
 		generateSelectionCanvas(saveSelection);
+		$buttonSaveSelection.val(copy.selectionOn);
+		$overlay.remove();
 		
 		// turn off save mode and directions
 		saveMode.on = false;
@@ -244,8 +266,21 @@ $(function(){
 	
 	// save selection of canvas button clicked
 	$buttonSaveSelection.click(function(){
-		saveMode.on = true;
-		saveMode.instructOne.fadeIn();
+		
+		if ( saveMode.on ) {
+			saveMode.on = false;
+			saveMode.instructOne.fadeOut();
+			$(this).val(copy.selectionOn)
+			$overlay.remove();
+		}
+		else {
+			saveMode.on = true;
+			saveMode.instructOne.fadeIn();
+			$(this).val(copy.selectionOff);
+
+			// create transparent canvas over whole page
+			generateCanvas(true);
+		}
 	});
 
 	// pixel size slider changed

@@ -14,9 +14,7 @@
 		<input type="submit" value="selection" id="save-selection" />
 		
 		<ul class="instructions">
-			<li class="step-one">click and drag to select the area of the canvas you want to save</li>
-			<li class="step-two">ok, now, keep dragging until you've selected everywhere you want to save</li>
-			<li class="step-three">step seven</li>		
+			<li class="step-one">click and drag to select the area of the canvas you want to save (top-left to bottom-right)</li>		
 		</ul>
 		
 	</div>
