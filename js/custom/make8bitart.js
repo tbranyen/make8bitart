@@ -93,6 +93,8 @@ $(function(){
 				'left' : 0
 			});
 			ctxOverlay = $overlay[0].getContext("2d");
+			$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
+
 		}
 		
 	};
@@ -225,10 +227,9 @@ $(function(){
 	
 	// bind mousedown and mouseup to canvas
 	$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
-	
+
 	// reset canvas 
 	$clearBG.click(function(){
-		console.log(pixel.color);
 		resetCanvas( pixel.color );
 	});
 	
