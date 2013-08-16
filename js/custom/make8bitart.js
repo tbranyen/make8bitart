@@ -150,11 +150,13 @@ $(function(){
 		var startX = Math.min( coords.startX, coords.endX );
 		var startY = Math.min( coords.startY, coords.endY );
 
-		tempCtx.drawImage(DOM.$canvas[0],startX, startY, width, height, 0, 0, width, height);
-	
-	    // write on screen
-	    var img = tempCanvas[0].toDataURL("image/png");
-	    window.open(img,'_blank');
+		if ( width && height ) {
+			tempCtx.drawImage(DOM.$canvas[0],startX, startY, width, height, 0, 0, width, height);
+		
+		    // write on screen
+		    var img = tempCanvas[0].toDataURL("image/png");
+		    window.open(img,'_blank');
+		}
 	    
 	    // remove tempCamvas
 	    tempCanvas.remove();
@@ -234,9 +236,9 @@ $(function(){
 		initpixel(size);
 		
 		// bind mousedown to canvi, mouseup to window
-		DOM.$canvas.mousedown(onMouseDown);
-		DOM.$overlay.mousedown(onMouseDown);
-		DOM.$window.mouseup(onMouseUp);
+		DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
+		DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
+		DOM.$draggydivs.mouseup(onMouseUp);
 	}(25));
 	
 	
@@ -295,7 +297,6 @@ $(function(){
 	
 	// save selection of canvas button clicked
 	DOM.$buttonSaveSelection.click(function(){
-		
 		if ( saveMode.on ) {
 			saveMode.on = false;
 			saveMode.instructOne.fadeOut();
