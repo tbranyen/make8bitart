@@ -18,12 +18,12 @@ $(function(){
 
 	var isDrawing = false;
 	var colorJennsPick = $('.button.color.favorite').css('background-color');
-	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection;
+	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection, rect;
 
 	var saveMode = {
 		on : false,
 		instructOne : $('.step-one').hide()
-	}
+	};
 	
 	var windowCanvas = {
 		height: DOM.$window.height(),
@@ -45,10 +45,7 @@ $(function(){
 		color: '#000',
 		size: 25
 	};
-	
 
-	// overlay stuff
-	var rect = {};
 	
 	
 
@@ -68,10 +65,8 @@ $(function(){
 		'top' : '100px'
 	});
 	
-	
-	
-	
-	
+
+
 	
 	/*** LET'S MAKE SOME EFFING ART ***/
 
@@ -85,7 +80,7 @@ $(function(){
 		// selection overlay
 		DOM.$overlay = $('<canvas id="overlay" width="' + windowCanvas.width + '" height="' + windowCanvas.height + '"></canvas>');
 		DOM.$overlay.css({
-			'background':'rgba(0,0,0,.5)',
+			'background':'none',
 			'position' : 'absolute',
 			'top' : 0,
 			'left' : 0,
@@ -93,6 +88,8 @@ $(function(){
 		});
 		DOM.$body.prepend( DOM.$overlay );
 		ctxOverlay = DOM.$overlay[0].getContext("2d");
+		ctxOverlay.fillStyle = 'rgba(0,0,0,.5)';
+
 	};
 	
 	var drawPixel = function(e) {
@@ -121,10 +118,6 @@ $(function(){
 	
 	};
 	
-	
-	
-	
-	// start save selection mode
 	var startSaveSelection = function(e) {
 		saveSelection = {
 			startX : e.pageX,
@@ -132,18 +125,15 @@ $(function(){
 		};
 	};
 	
-	// get position data of selection
 	var generateSaveSelection = function(e) {
 		saveSelection.endX = e.pageX;
 		saveSelection.endY = e.pageY;
 
 		generateSelectionCanvas(saveSelection);
 		
-		// turn off save mode by clicking save selection button
 		DOM.$buttonSaveSelection.click();
 	};
 	
-	// generate image from save selection
 	var generateSelectionCanvas = function(coords) {
 		
 		// temporary canvas to save image
@@ -152,11 +142,15 @@ $(function(){
         var tempCtx = tempCanvas[0].getContext("2d");
 
 		// set dimensions and draw based on selection
-	    var width = coords.endX - coords.startX;
-	    var height = coords.endY - coords.startY;
+	    var width = Math.abs(coords.endX - coords.startX);
+	    var height = Math.abs(coords.endY - coords.startY);
 		tempCanvas[0].width = width;
 		tempCanvas[0].height = height;
-		tempCtx.drawImage(DOM.$canvas[0],coords.startX, coords.startY, width, height, 0, 0, width, height);
+
+		var startX = Math.min( coords.startX, coords.endX );
+		var startY = Math.min( coords.startY, coords.endY );
+
+		tempCtx.drawImage(DOM.$canvas[0],startX, startY, width, height, 0, 0, width, height);
 	
 	    // write on screen
 	    var img = tempCanvas[0].toDataURL("image/png");
@@ -170,15 +164,10 @@ $(function(){
 		rect.w = (e.pageX - this.offsetLeft) - rect.startX;
 		rect.h = (e.pageY - this.offsetTop) - rect.startY ;
 		ctxOverlay.clearRect(0,0,DOM.$overlay.width(),DOM.$overlay.height());
-		ctxOverlay.fillStyle = 'rgba(255,255,255,.5)';
-		ctxOverlay.fillRect(rect.startX, rect.startY, rect.w, rect.h);
+		ctxOverlay.fillStyle = 'rgba(0,0,0,.5)';
+		ctxOverlay.fillRect(0,0,DOM.$overlay.width(),DOM.$overlay.height());
+		ctxOverlay.clearRect(rect.startX, rect.startY, rect.w, rect.h);
 	};
-	
-	
-	
-	
-	
-	
 	
 	var resetCanvas = function(background) {
 		ctx.clearRect(0, 0, DOM.$canvas.width(), DOM.$canvas.height());	
@@ -194,8 +183,6 @@ $(function(){
 	
 	/*** MOUSE EVENT FUNCTIONS ***/
 	
-		
-	// mouse down drawing or saving
 	var onMouseDown = function(e) {
 		e.preventDefault();
 		if ( saveMode.on == false ) {
@@ -204,6 +191,8 @@ $(function(){
 			isDrawing = true;
 		}
 		else {
+			// overlay stuff
+			rect = {};
 			startSaveSelection(e);	
 			rect.startX = e.pageX - this.offsetLeft;
 			rect.startY = e.pageY - this.offsetTop;
@@ -211,7 +200,6 @@ $(function(){
 		}
 	};
 	
-	// mouse up drawing or saving
 	var onMouseUp = function(e) {
 
 		if ( saveMode.on == false ) {
@@ -219,14 +207,16 @@ $(function(){
 			isDrawing = false;
 		}
 		else {
+			DOM.$overlay.off('mousemove');
+			ctxOverlay.clearRect(0,0,DOM.$overlay.width(),DOM.$overlay.height());
 			generateSaveSelection(e);
-			rect.startX = e.pageX - this.offsetLeft;
-			rect.startY = e.pageY - this.offsetTop;
-			
+			saveMode.on = false;
+			rect = {};
 		}
 	};
 	
 	
+
 	
 	/*** INITIALIZE ***/
 	
@@ -250,6 +240,8 @@ $(function(){
 	}(25));
 	
 	
+
+
 
 	/*** EVENT HANDLERS ***/
 
@@ -280,7 +272,6 @@ $(function(){
 			var demoColor = windowCanvas.background;
 		} 
 		DOM.$pixelDemoDiv.css('background', demoColor);
-
 		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
 	});
 	
@@ -315,11 +306,9 @@ $(function(){
 			saveMode.on = true;
 			saveMode.instructOne.fadeIn();
 			$(this).val(copy.selectionOff);
-			DOM.$overlay.show();			
+			ctxOverlay.fillRect(0,0,DOM.$overlay.width(),DOM.$overlay.height());			
+			DOM.$overlay.show();
 		}
 	});
 
-
-
 });
-
