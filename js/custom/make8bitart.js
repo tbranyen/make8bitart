@@ -218,6 +218,7 @@ $(function(){
 	};
 	
 	
+	
 
 	
 	/*** INITIALIZE ***/
@@ -238,7 +239,9 @@ $(function(){
 		// bind mousedown to canvi, mouseup to window
 		DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
 		DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
-		DOM.$draggydivs.mouseup(onMouseUp);
+		DOM.$draggydivs.mouseup(function(){
+			DOM.$canvas.off('mousemove');
+		});
 	}(25));
 	
 	
