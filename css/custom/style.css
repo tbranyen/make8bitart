@@ -22,9 +22,15 @@ canvas { background: #fff; cursor: crosshair; }
 /* draggy "plugin" */
 .draggy { padding: 10px; box-shadow: 5px 5px 0 #000; border: 1px solid #000; background: #fffff3; }
 
+/* tool tips */
+.tip { display: inline-block; font-weight: bold; color: #000; padding: 2px 6px; background-color: #00c200; position: relative; border: 1px dashed green; }
+.tip-text { display: none; position: absolute; top: 10px; left: 20px; width: 150px; padding: 10px; border: 1px solid #000; background-color: #fff; z-index: 50; }
+.tip:hover { cursor: pointer; }
+
 /* canvas tools box */
 #toolbox { width: 145px; }
-#pixel-size-demo { background: black; }
+#pixel-size-demo { background: black; margin:3px; }
+ul.instructions { padding: 0 0 0 20px; }
 
 /* color palette box */
 #colorbox { width: 145px; }
@@ -50,11 +56,6 @@ canvas { background: #fff; cursor: crosshair; }
 .button.color.current, .button.current, .button.custom.current{ border: 5px solid #333; margin: 1px;}
 .button.brush.current { margin: 1px 8px 1px 0;}
 
-/* save box */
-#savebox { width: 145; }
-
-/* info */
-#info { background: #b9c630; width: 300px; }
 
 /* clearfix */
 .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }

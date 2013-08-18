@@ -13,7 +13,8 @@ $(function(){
 		$sliderSize : $('#size-slider'),
 		$pixelDemoDiv : $('#pixel-size-demo'),
 		$pixelDemoNumber : $('#pixel-size-number'),
-		$draggydivs : $('.draggy')
+		$draggydivs : $('.draggy'),
+		$tips : $('.tip')
 	};
 
 	var isDrawing = false;
@@ -314,5 +315,15 @@ $(function(){
 			DOM.$overlay.show();
 		}
 	});
+	
+	// tooltip hover 
+	DOM.$tips.hover(
+		function(){
+			$(this).find('.tip-text').fadeIn();
+		}, 
+		function() {
+			$(this).find('.tip-text').fadeOut();
+		}
+	);
 
 });

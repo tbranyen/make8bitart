@@ -11,7 +11,6 @@
 
 	include('includes/toolbox.php'); 
 	include('includes/colorbox.php');
-	include('includes/savebox.php');
 ?>
 
 <script src="js/libs/jquery.min.js"></script>

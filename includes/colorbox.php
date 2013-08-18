@@ -1,4 +1,4 @@
-<div id="colorbox" class="draggy" title="Color Palette">
+<div id="colorbox" class="draggy">
 
 	<div class="controls">
 		<img class="ui-dragger" src="assets/draggybits/dragger.png">	
