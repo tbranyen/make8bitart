@@ -319,10 +319,10 @@ $(function(){
 	// tooltip hover 
 	DOM.$tips.hover(
 		function(){
-			$(this).find('.tip-text').fadeIn();
+			$(this).find('.tip-text').stop().show();
 		}, 
 		function() {
-			$(this).find('.tip-text').fadeOut();
+			$(this).find('.tip-text').stop().hide();
 		}
 	);
 
