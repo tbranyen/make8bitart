@@ -17,9 +17,9 @@
 	</div>
 	
 	<div id="save" class="inner">
-		<h3>save your art:</h3>
+		<h3>save your art:</h3> 
 		
-		<input type="submit" value="full page" id="save-full" /><br />
+		<input type="submit" value="full page" id="save-full" /> <div class="tip"> ? <span class="tip-text">may not work if your image is super huge. if that's the case, save by selection.</span></div><br />
 		<input type="submit" value="selection" id="save-selection" />
 		
 		<ul class="instructions">

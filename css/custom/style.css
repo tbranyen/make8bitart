@@ -32,6 +32,8 @@ canvas { background: #fff; cursor: crosshair; }
 #header h1 { font-size: 2.5em; margin: 0; }
 #header h1 small { font-size: .4em;}
 h2 { background: aqua; display: inline-block; float: right; font-size: 1em; padding: 5px; margin: 10px 0 0; }
+h2 a { color: blue; font-size: 1.2em;}
+.hearts { color: hotpink; }
 
 /* canvas tools box */
 #toolbox { width: 145px; }

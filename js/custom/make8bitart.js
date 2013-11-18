@@ -82,7 +82,7 @@ $(function(){
 	});
 	DOM.$colorbox.css({
 		'left' : '600px',
-		'top' : '250px'
+		'top' : '100px'
 	});
 	
 
