@@ -109,6 +109,19 @@ $(function(){
 		DOM.$body.prepend( DOM.$overlay );
 		ctxOverlay = DOM.$overlay[0].getContext("2d");
 		ctxOverlay.fillStyle = 'rgba(0,0,0,.5)';
+		
+		// restore webstorage data
+		if ( canStorage() ) {
+			var savedCanvas = localStorage['savedCanvas'];	
+			if ( savedCanvas ) {
+				var img = new Image;
+				img.onload = function(){
+					ctx.drawImage(img,0,0); // Or at whatever offset you like
+				};
+				img.src = savedCanvas;
+			}	
+		}
+
 
 	};
 	
@@ -200,6 +213,12 @@ $(function(){
 		}
 	};
 	
+	var saveToLocalStorage = function() {
+		if ( canStorage() ) {
+			savedCanvas = DOM.$canvas[0].toDataURL("image/png");
+			localStorage['savedCanvas'] = savedCanvas;
+		}
+	}
 	
 	
 	
@@ -227,6 +246,9 @@ $(function(){
 		if ( saveMode.on == false ) {
 			DOM.$canvas.off('mousemove');
 			isDrawing = false;
+			
+			// save
+			saveToLocalStorage();
 		}
 		else {
 			DOM.$overlay.off('mousemove');
@@ -243,6 +265,15 @@ $(function(){
 	
 	/*** INITIALIZE ***/
 	
+	var canStorage = function() {
+		try {
+			return 'localStorage' in window && window['localStorage'] !== null;
+		} 
+		catch (e) {
+			return false;
+		}
+	}
+
 	var initpixel = function(size) {
 		pixel.size = size;
 		DOM.$pixelSizeDemoDiv.css({
@@ -273,6 +304,7 @@ $(function(){
 	// reset canvas 
 	DOM.$clearBG.click(function(){
 		resetCanvas( pixel.color );
+		saveToLocalStorage();
 	});
 	
 	// choose color
