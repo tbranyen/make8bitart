@@ -27,6 +27,12 @@ canvas { background: #fff; cursor: crosshair; }
 .tip-text { display: none; position: absolute; top: 10px; left: 20px; width: 150px; padding: 10px; border: 1px solid #000; background-color: #fff; z-index: 50; }
 .tip:hover { cursor: pointer; }
 
+/* header */
+#header { font-size: 16px; width: 300px; }
+#header h1 { font-size: 2.5em; margin: 0; }
+#header h1 small { font-size: .4em;}
+h2 { background: aqua; display: inline-block; float: right; font-size: 1em; padding: 5px; margin: 10px 0 0; }
+
 /* canvas tools box */
 #toolbox { width: 145px; }
 #pixel-size-demo { background: black; margin:3px; }
@@ -34,11 +40,12 @@ ul.instructions { padding: 0 0 0 20px; }
 
 /* color palette box */
 #colorbox { width: 145px; }
+#colorbox h3 { margin-top: 0; }
+#color { margin-bottom: 20px; }
 .button { display: block; float: left; background: #efefef; border: 2px solid rgba(255,255,255,.5); margin: 5px 10px 5px 0; padding: 3px 6px; color: #333; cursor: pointer; width: 40px; text-align: center; font-weight: normal; }
 .button.save { float:none; width: 75px; }
 .button:hover { background: #ddd; }
 .button.color { background: #fff; border: 5px solid none; width: 35px; height: 35px; padding: 0; margin: 4px; }
-
 .button.color.red { background: red; }
 .button.color.orange { background: orange; }
 .button.color.yellow { background: yellow; }
@@ -48,14 +55,15 @@ ul.instructions { padding: 0 0 0 20px; }
 .button.color.black { background: black; }
 .button.color.gray { background: gray; }
 .button.color.white { background: white; border: 2px solid rgba(0,0,0,.25); }	
-
-.button.color.favorite { background: #339999; }
+.button.color.favorite { background: hotpink; }
 .button.color.custom { background: url('../../assets/colorful.png'); }
 .button.color.transparent { border-color: #ccc; background: url('../../assets/bg.png'); }
-
 .button.color.current, .button.current, .button.custom.current{ border: 5px solid #333; margin: 1px;}
 .button.brush.current { margin: 1px 8px 1px 0;}
 
+/* color picker */
+#colorpicker { position: relative; }
+#colorpicker .color-demo { width: 100%; height: 20px; }
 
 /* clearfix */
 .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }

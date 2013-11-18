@@ -8,13 +8,14 @@
 <body>
 
 <?php 
-
+	include('includes/header.php');
 	include('includes/toolbox.php'); 
 	include('includes/colorbox.php');
 ?>
 
 <script src="js/libs/jquery.min.js"></script>
 <script src="js/libs/draggybits.js"></script>
+<script src="js/libs/pixeldiv.js"></script>
 <script src="js/custom/make8bitart.js"></script>
 
 <!-- my personal tracking tags -->

@@ -3,7 +3,11 @@ $(function(){
 	var DOM = {
 		$window : $(window),
 		$body : $('body'),
-		$color : $('.color'),
+		$color : $('.color').not('.custom'),
+		$colorCustom : $('.color.custom'),
+		$colorPicker : $('#colorpicker'),
+		$colorPickerDemo : $('.color-demo'),
+		$header : $('#header'),
 		$toolbox : $('#toolbox'),
 		$savebox : $('#savebox'),
 		$colorbox : $('#colorbox'),
@@ -11,7 +15,7 @@ $(function(){
 		$buttonSaveFull : $('#save-full'),
 		$buttonSaveSelection : $('#save-selection'),
 		$sliderSize : $('#size-slider'),
-		$pixelDemoDiv : $('#pixel-size-demo'),
+		$pixelSizeDemoDiv : $('#pixel-size-demo'),
 		$pixelDemoNumber : $('#pixel-size-number'),
 		$draggydivs : $('.draggy'),
 		$tips : $('.tip')
@@ -53,17 +57,32 @@ $(function(){
 	/*** OUTSIDE LIBRARY STUFF ***/
 	
 	DOM.$draggydivs.draggyBits();
-	DOM.$toolbox.css({
-		'left' : '20px',
+	
+	DOM.$colorPicker.children('img').pixelDiv({
+        hideIMG : true,        
+        pixelSize : 9,
+        divID : $(this).parent().attr('id'),
+        divClass : 'clearfix',
+    });
+    
+    DOM.$colorPicker.slideUp();
+    
+    DOM.$colorPickerPixels = $('.pixelDiv-pixel');
+
+	
+	
+	/*** DRAGGY POSITIONS ***/
+	DOM.$header.css({
+		'left': '200px',
 		'top' : '20px'
 	});
-	DOM.$savebox.css({
-		'left' : '800px',
-		'top' : '20px'
+	DOM.$toolbox.css({
+		'left' : '30px',
+		'top' : '200px'
 	});
 	DOM.$colorbox.css({
-		'left' : '300px',
-		'top' : '100px'
+		'left' : '600px',
+		'top' : '250px'
 	});
 	
 
@@ -184,7 +203,7 @@ $(function(){
 	
 	
 	
-	/*** MOUSE EVENT FUNCTIONS ***/
+	/*** DRAWING MOUSE EVENT FUNCTIONS ***/
 	
 	var onMouseDown = function(e) {
 		e.preventDefault();
@@ -226,7 +245,7 @@ $(function(){
 	
 	var initpixel = function(size) {
 		pixel.size = size;
-		DOM.$pixelDemoDiv.css({
+		DOM.$pixelSizeDemoDiv.css({
 			'width' : pixel.size,
 			'height': pixel.size
 		});
@@ -258,6 +277,8 @@ $(function(){
 	
 	// choose color
 	DOM.$color.click(function(){
+		DOM.$colorPicker.slideUp();
+		
 		var $newColor = $(this);
 		
 		if ( $newColor.hasClass('favorite') ) {
@@ -268,6 +289,7 @@ $(function(){
 		}
 		
 		DOM.$color.removeClass('current');
+		DOM.$colorCustom.removeClass('current');
 		$newColor.addClass('current');
 		pixel.color = newColorLabel;
 
@@ -277,19 +299,45 @@ $(function(){
 		else {
 			var demoColor = windowCanvas.background;
 		} 
-		DOM.$pixelDemoDiv.css('background', demoColor);
+		DOM.$pixelSizeDemoDiv.css('background-color', demoColor);
 		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
 	});
+	
+	// custom color picker started
+	DOM.$colorCustom.click(function(){
+		DOM.$colorPicker.slideToggle();
+	});
+	
+	// custom color hover
+	DOM.$colorPickerPixels.hover(
+		function(e){
+			var demoColor = $(this).css('background-color');
+			DOM.$colorPickerDemo.css('background-color', demoColor);
+		},
+		function(e){
+			DOM.$colorPickerDemo.css('background-color', pixel.color);
+		}
+	);
+	
+	// custom color chosen
+	DOM.$colorPickerPixels.click(function(){
+		var newColor = $(this).css('background-color');
+		DOM.$color.removeClass('current');
+		DOM.$colorCustom.addClass('current');
+		
+		pixel.color = newColor;
+		DOM.$colorPickerDemo.css('background-color', newColor);
+		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColor);
+	});
+	
 	
 	// pixel size slider changed
 	DOM.$sliderSize.change(function(){
 		pixel.size = $(this).val();
-		
-		DOM.$pixelDemoDiv.css({
+		DOM.$pixelSizeDemoDiv.css({
 			'width' : pixel.size,
 			'height': pixel.size
 		});
-		
 		DOM.$pixelDemoNumber.text(pixel.size);
 	});
 

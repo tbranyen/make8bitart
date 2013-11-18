@@ -7,13 +7,13 @@
 	<div id="clear" class="inner">
 		<h3>canvas tools</h3>
 
-		<input type="submit" value="new canvas" id="clear-canvas" /> <div class="tip"> ? <span class="tip-text">this will clear your art and create a new canvas with a background of whatever color is selected</span></div>
+		<input type="submit" value="new canvas" id="clear-canvas" /> <div class="tip"> ? <span class="tip-text">this will clear your canvas and create a new one with the background of whichever color is selected, including "erase" for a transparent one</span></div>
 	</div>
 	
 	<div id="size" class="inner">
 		<h3>pixel size</h3>
-		<input id="size-slider" type="number" min="1" max="100" step="1" value="25" /> <div class="tip"> ? <span class="tip-text">this *won't* clear the whole page, but using different sized pixels makes it less "8-bit"ish. you do you.</span></div>
-		<div id="pixel-size-demo"> </div>
+		<input id="size-slider" type="number" min="1" max="100" step="1" value="25" /> <div class="tip"> ? <span class="tip-text">changing pixel size *won't* clear the whole page, but using different sized pixels makes it less "8-bit"ish. you do you, though. I'm not the 8-bit police.</span></div>
+		<div id="pixel-size-demo" class="color-demo"> </div>
 	</div>
 	
 	<div id="save" class="inner">
