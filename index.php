@@ -1,11 +1,12 @@
-<!DOCTYPE html5>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="css/libs/draggybits.css" />
-	<link rel="stylesheet" href="css/custom/style.css" />
+	<link rel="stylesheet" href="styles/libs/draggybits.css" />
+	<link rel="stylesheet" href="styles/custom/style.css" />
+	<link rel="icon" href="assets/customcolors.png" />
 </head>
 
-<body>
+<body id="do-what-you-want-what-you-want-with-my-html-body">
 
 <?php 
 	include('includes/header.php');

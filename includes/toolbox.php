@@ -17,7 +17,7 @@
 	</div>
 	
 	<div id="save" class="inner">
-		<h3>save your art:</h3> 
+		<h3>save your art</h3> 
 		
 		<input type="submit" value="full page" id="save-full" /> <div class="tip"> ? <span class="tip-text">may not work if your image is super huge. if that's the case, save by selection.</span></div><br />
 		<input type="submit" value="selection" id="save-selection" />
@@ -26,6 +26,13 @@
 			<li class="step-one">click and drag to select the area of the canvas you want to save (top-left to bottom-right)</li>		
 		</ul>
 		
+	</div>
+	
+	<div id="share">
+		<h3>tell your pals</h3>
+	<iframe id="facebook" src="http://www.facebook.com/plugins/like.php?app_id=124052687676604&amp;href=http%3A%2F%2Fmake8bitart.com&amp;send=false&amp;layout=button_count&amp;width=140&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=verdana&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:140px; height:21px;" allowTransparency="true"></iframe>
+	<br /><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://make8bitart.com" data-text="Make 8-bit art!" data-via="jennschiffer" data-related="jennschiffer">Tweet</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	</div>
 
 </div>
