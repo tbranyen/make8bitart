@@ -41,13 +41,13 @@ h2 a { color: blue; font-size: 1.2em;}
 ul.instructions { padding: 0 0 0 20px; }
 
 /* color palette box */
-#colorbox { width: 145px; }
+#colorbox { width: 150px; }
 #colorbox h3 { margin-top: 0; }
-#color { margin-bottom: 20px; }
+#color { margin-bottom: 10px; }
 .button { display: block; float: left; background: #efefef; border: 2px solid rgba(255,255,255,.5); margin: 5px 10px 5px 0; padding: 3px 6px; color: #333; cursor: pointer; width: 40px; text-align: center; font-weight: normal; }
 .button.save { float:none; width: 75px; }
 .button:hover { background: #ddd; }
-.button.color { background: #fff; border: 5px solid none; width: 35px; height: 35px; padding: 0; margin: 4px; }
+.button.color { background: #fff; border: 5px solid none; width: 25px; height: 25px; padding: 0; margin: 4px; }
 .button.color.red { background: red; }
 .button.color.orange { background: orange; }
 .button.color.yellow { background: yellow; }
@@ -65,10 +65,13 @@ ul.instructions { padding: 0 0 0 20px; }
 
 /* color picker */
 #colorpicker { position: relative; }
-#colorpicker .color-demo { width: 100%; height: 20px; }
+#colorpicker .color-demo { background: #000; width: 100%; height: 20px; }
+#colorpicker .pixelDiv { margin: 5px auto; }
+#colorpicker p { font-size: 1.5em; }
+#hex-color.current { border: 4px solid #000; }
 
 /* clearfix */
 .clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
-.clearfix { display: inline-block; }
+.clearfix { display: block; }
 html[xmlns] .clearfix { display: block; }
 * html .clearfix { height: 1%; }

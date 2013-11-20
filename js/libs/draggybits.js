@@ -161,10 +161,7 @@
 			$this.css('z-index',zIndex);
 		}
 		$current = $this.css('z-index', zIndex);
-					zIndex++;
-
-		console.log($this.css('z-index'));
-
+		zIndex++;
 	};
 	
 	

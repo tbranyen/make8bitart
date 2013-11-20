@@ -20,6 +20,13 @@
 		<a class="button color custom" title="custom" /> </a>
 	</div>
 	
-	<?php include('includes/colorpicker.php'); ?>
+	<div id="colorpicker">
+		<h3>hex value:</h3>
+		<p>#<input id="hex-color" type="text" value="000000" /></p>
+		
+		<h3>click to pick:</h3>
+		<img id="8bitcolors" src="assets/customcolors.png" />
+		<div class="color-demo"></div>
+	</div>
 
 </div>

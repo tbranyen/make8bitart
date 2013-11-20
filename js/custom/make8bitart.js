@@ -18,7 +18,8 @@ $(function(){
 		$pixelSizeDemoDiv : $('#pixel-size-demo'),
 		$pixelDemoNumber : $('#pixel-size-number'),
 		$draggydivs : $('.draggy'),
-		$tips : $('.tip')
+		$tips : $('.tip'),
+		$hex : $('#hex-color')
 	};
 
 	var isDrawing = false;
@@ -218,7 +219,8 @@ $(function(){
 			savedCanvas = DOM.$canvas[0].toDataURL("image/png");
 			localStorage['savedCanvas'] = savedCanvas;
 		}
-	}
+	};
+	
 	
 	
 	
@@ -320,18 +322,21 @@ $(function(){
 			var newColorLabel = $newColor.attr('title');
 		}
 		
-		DOM.$color.removeClass('current');
-		DOM.$colorCustom.removeClass('current');
+		$('.current').removeClass('current');
 		$newColor.addClass('current');
 		pixel.color = newColorLabel;
 
 		if ( pixel.color != 'erase' ) {
 			var demoColor = pixel.color;
+			DOM.$pixelSizeDemoDiv.css('background-image', 'none');
+			DOM.$colorPickerDemo.css('background-image', 'none');
 		}
 		else {
-			var demoColor = windowCanvas.background;
+			DOM.$pixelSizeDemoDiv.css('background-image', 'url(assets/bg.png)');
+			DOM.$colorPickerDemo.css('background-image', 'url(assets/bg.png)');
 		} 
 		DOM.$pixelSizeDemoDiv.css('background-color', demoColor);
+		DOM.$colorPickerDemo.css('background-color', demoColor);
 		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
 	});
 	
@@ -344,6 +349,8 @@ $(function(){
 	DOM.$colorPickerPixels.hover(
 		function(e){
 			var demoColor = $(this).css('background-color');
+			DOM.$pixelSizeDemoDiv.css('background-image', 'none');
+			DOM.$colorPickerDemo.css('background-image', 'none');
 			DOM.$colorPickerDemo.css('background-color', demoColor);
 		},
 		function(e){
@@ -354,7 +361,7 @@ $(function(){
 	// custom color chosen
 	DOM.$colorPickerPixels.click(function(){
 		var newColor = $(this).css('background-color');
-		DOM.$color.removeClass('current');
+		$('.current').removeClass('current');
 		DOM.$colorCustom.addClass('current');
 		
 		pixel.color = newColor;
@@ -362,6 +369,19 @@ $(function(){
 		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColor);
 	});
 	
+	var hexColorChosen = function() {
+		var newColor = '#' + DOM.$hex.val();
+		$('.current').removeClass('current');
+		DOM.$hex.addClass('current');
+		
+		pixel.color = newColor;
+		DOM.$colorPickerDemo.css('background-color', newColor);
+		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColor);
+	};
+	
+	// hex color input change 
+	DOM.$hex.keyup(hexColorChosen);
+	DOM.$hex.focus(hexColorChosen);
 	
 	// pixel size slider changed
 	DOM.$sliderSize.change(function(){
