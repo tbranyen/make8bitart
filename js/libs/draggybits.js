@@ -17,10 +17,10 @@
 	var $window = $(window);
 
 	var defaults = {
-		onMinimize : function (e) { return false; },
-		onInit : function (e) { return false; },
-		onClose : function (e) { return false; },
-		onRestore : function (e) { return false; }
+		onMinimize : function(e) { return false; },
+		onInit : function(e) { return false; },
+		onClose : function(e) { return false; },
+		onRestore : function(e) { return false; }
 	};
 
 	var methods = {
@@ -29,7 +29,7 @@
 			
 			return this.each(function() {	  
 			
-				var $this = $(this).addClass(pluginName);
+				var $this = $(this).addClass(pluginName).click(onDraggyClick);
 				var $dragger = $this.find('.' + draggerClass);
 				var $closer = $this.find('.' + closerClass).click(onCloseClick);
 				var $minimizer = $this.find('.' + minimizeClass).click(onMinimizeClick);
@@ -48,12 +48,10 @@
 				};
 
 				$this.data(pluginName, data);
-
+				
 				numDraggers++;
 
 				var css = {
-					//top : numDraggers * tileOffset.y,
-					//left : 200 + (numDraggers * tileOffset.x),
 					position : 'absolute'
 				};
 
@@ -105,7 +103,7 @@
 
     /*** EVENTS HANDLERS ***/
 
-	var onMove = function (e) {
+	var onMove = function(e) {
 		var curr = { x: e.pageX, y: e.pageY };
 
 		var dx = curr.x - pos.x;
@@ -116,7 +114,7 @@
 		pos = curr;
 	};
 
-	var onMouseUp = function (e) {
+	var onMouseUp = function(e) {
 		if (!isMoving) {
 			return;
 		}
@@ -127,7 +125,7 @@
 		isMoving = false;
 	};
 
-	var onMouseDown = function (e) {
+	var onMouseDown = function(e) {
 		var $this = $(e.target);
 		var isDragger = $this.hasClass(draggerClass);
 
@@ -145,17 +143,30 @@
 		isMoving = true;
 	};
 
-	var onCloseClick = function (e) {
+	var onCloseClick = function(e) {
 		var $this = $(this);
 		var $par = $this.parents('.'+ pluginName);
 			$par[pluginName]('close');
 	};
 
-	var onMinimizeClick = function (e) {
+	var onMinimizeClick = function(e) {
 		var $this = $(this);
 		var $par = $this.parents('.'+ pluginName);
 			$par[pluginName]('minimize');
 	};
+	
+	var onDraggyClick = function(e) {
+		var $this = $(this);
+		if ( $this.css('z-index') == 'auto' ) {
+			$this.css('z-index',zIndex);
+		}
+		else {
+			zIndex++;
+			$current = $this.css('z-index', zIndex);
+		}
+	};
+	
+	
 
 	/*** GLOBAL EVENTS ***/
 
