@@ -8,7 +8,7 @@
     var hiddenClass = 'ui-hidden';
 
     var isMoving = false;
-	var zIndex = 100;
+	var zIndex = 5;
 	var pos = { x:0, y:0 };
 	var numDraggers = 0;
 	var tileOffset = { x:20, y:20};
@@ -160,10 +160,11 @@
 		if ( $this.css('z-index') == 'auto' ) {
 			$this.css('z-index',zIndex);
 		}
-		else {
-			zIndex++;
-			$current = $this.css('z-index', zIndex);
-		}
+		$current = $this.css('z-index', zIndex);
+					zIndex++;
+
+		console.log($this.css('z-index'));
+
 	};
 	
 	
