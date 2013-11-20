@@ -1,6 +1,33 @@
 <!DOCTYPE html>
+
+<!--
+
+                                             ____
+   ___                                      .-~. /_"-._
+  `-._~-.                                  / /_ "~o\  :Y
+      \  \                                / : \~x.  ` ')
+       ]  Y                              /  |  Y< ~-.__j      -------------------------
+      /   !                        _.--~T : l  l<  /.-~      /                         \
+     /   /                 ____.--~ .   ` l /~\ \<|Y   -----\  JENN SCHIFFER MADE THIS |
+    /   /             .-~~"        /| .    ',-~\ \L|        \    WOWOWOWOWOWOWOWOW     /
+   /   /             /     .^   \ Y~Y \.^>/l_   "--'         \________________________/
+  /   Y           .-"(  .  l__  j_j l_/ /~_.-~    .
+ Y    l          /    \  )    ~~~." / `/"~ / \.__/l_
+ |     \     _.-"      ~-{__     l  :  l._Z~-.___.--~
+ |      ~---~           /   ~~"---\_  ' __[>
+ l  .                _.^   ___     _>-y~
+  \  \     .      .-~   .-~   ~>--"  /
+   \  ~---"            /     ./  _.-'
+    "-.,_____.,_  _.--~\     _.-~
+                ~~     (   _}  
+                        `. ~(
+                          )  \
+                         /,`--'~\--'
+
+-->
 <html lang="en">
 <head>
+	<title>make 8-bit art!</title>
 	<link rel="stylesheet" href="styles/libs/draggybits.css" />
 	<link rel="stylesheet" href="styles/custom/style.css" />
 	<link rel="icon" href="assets/customcolors.png" />
