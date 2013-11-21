@@ -22,7 +22,7 @@
 	
 	<div id="colorpicker">
 		<h3>hex value:</h3>
-		<p>#<input id="hex-color" type="text" value="000000" /></p>
+		<p>#<input id="hex-color" type="text" value="000000" /> <a href="#" title="color dropper"><img id="color-dropper" src="assets/dropper.png" alt="dropper"></a></p>
 		
 		<h3>click to pick:</h3>
 		<img id="8bitcolors" src="assets/customcolors.png" />

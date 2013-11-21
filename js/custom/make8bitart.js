@@ -19,9 +19,11 @@ $(function(){
 		$pixelDemoNumber : $('#pixel-size-number'),
 		$draggydivs : $('.draggy'),
 		$tips : $('.tip'),
-		$hex : $('#hex-color')
+		$hex : $('#hex-color'),
+		$dropper : $('#color-dropper')
 	};
 
+	var isDropper = false;
 	var isDrawing = false;
 	var colorJennsPick = $('.button.color.favorite').css('background-color');
 	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection, rect;
@@ -233,6 +235,16 @@ $(function(){
         }
         return hex;
     };
+    
+    var setDropperColor = function( color ) {
+		pixel.color = color;
+		DOM.$pixelSizeDemoDiv.css('background-image', 'none');
+		DOM.$colorPickerDemo.css('background-image', 'none');
+		DOM.$pixelSizeDemoDiv.css('background-color', pixel.color);
+		DOM.$colorPickerDemo.css('background-color', pixel.color);
+		DOM.$hex.val(rgbToHex(DOM.$colorPickerDemo.css('background-color')));
+		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + pixel.color);
+    };
 	
 	
 	
@@ -241,7 +253,16 @@ $(function(){
 	
 	var onMouseDown = function(e) {
 		e.preventDefault();
-		if ( saveMode.on == false ) {
+		
+		if ( isDropper ) {
+			var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+			var hoverRGB = 'rgb(' + hoverData[0] + ',' + hoverData[1] + ',' + hoverData[2] + ')';
+			isDropper = false;
+			setDropperColor( hoverRGB )
+			DOM.$canvas.removeClass('dropper-mode');
+			DOM.$dropper.removeClass('current').removeAttr('style');
+		}
+		else if ( !saveMode.on) {
 			drawPixel(e);
 			DOM.$canvas.on('mousemove', drawPixel);
 			isDrawing = true;
@@ -409,6 +430,35 @@ $(function(){
 		});
 		DOM.$pixelDemoNumber.text(pixel.size);
 	});
+	
+	DOM.$dropper.click(function(e){
+		e.preventDefault();
+		
+		if ( DOM.$dropper.hasClass('current') ) {
+			DOM.$dropper.removeClass('current').removeAttr('style');
+			DOM.$canvas.removeClass('dropper-mode');
+			isDropper = false;
+		}
+		else {
+			isDropper = true;
+			DOM.$dropper.addClass('current');
+			DOM.$canvas.addClass('dropper-mode');
+			
+			DOM.$canvas.mousemove(function(e){
+				var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+				var hoverRGB = 'rgb(' + hoverData[0] + ',' + hoverData[1] + ',' + hoverData[2] + ')';
+				DOM.$dropper.css('background-color', hoverRGB);
+
+				DOM.$pixelSizeDemoDiv.css('background-image', 'none');
+				DOM.$colorPickerDemo.css('background-image', 'none');
+				DOM.$colorPickerDemo.css('background-color', hoverRGB);
+				DOM.$hex.val(rgbToHex(hoverRGB));
+
+			});
+		}
+	});
+	
+
 
 	// save full canvas 
 	DOM.$buttonSaveFull.click(function(){
