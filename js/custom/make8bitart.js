@@ -48,7 +48,7 @@ $(function(){
 	};
 	
 	var pixel = {
-		color: '#000',
+		color: 'rgb(00,00,00)',
 		size: 25
 	};
 
@@ -221,6 +221,19 @@ $(function(){
 		}
 	};
 	
+	var rgbToHex = function( rgb ) {
+        var rgbArray = rgb.substr(4, rgb.length - 5).split(',');
+        var hex = "";
+        for ( var i = 0; i <= 2; i++ ) {
+            var hexUnit = parseInt(rgbArray[i]).toString(16);
+            if ( hexUnit.length == 1 ) {
+                hexUnit = '0' + hexUnit;
+            }
+            hex += hexUnit;
+        }
+        return hex;
+    };
+	
 	
 	
 	
@@ -334,9 +347,11 @@ $(function(){
 		else {
 			DOM.$pixelSizeDemoDiv.css('background-image', 'url(assets/bg.png)');
 			DOM.$colorPickerDemo.css('background-image', 'url(assets/bg.png)');
+			DOM.$hex.val('');
 		} 
 		DOM.$pixelSizeDemoDiv.css('background-color', demoColor);
 		DOM.$colorPickerDemo.css('background-color', demoColor);
+		DOM.$hex.val(rgbToHex(DOM.$colorPickerDemo.css('background-color')));
 		DOM.$draggydivs.css('box-shadow','5px 5px 0 ' + newColorLabel);
 	});
 	
@@ -352,9 +367,11 @@ $(function(){
 			DOM.$pixelSizeDemoDiv.css('background-image', 'none');
 			DOM.$colorPickerDemo.css('background-image', 'none');
 			DOM.$colorPickerDemo.css('background-color', demoColor);
+			DOM.$hex.val(rgbToHex(demoColor));
 		},
 		function(e){
 			DOM.$colorPickerDemo.css('background-color', pixel.color);
+			DOM.$hex.val(rgbToHex(DOM.$colorPickerDemo.css('background-color')));
 		}
 	);
 	
