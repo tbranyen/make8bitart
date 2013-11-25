@@ -115,14 +115,7 @@ $(function(){
 		
 		// restore webstorage data
 		if ( canStorage() ) {
-			var savedCanvas = localStorage['savedCanvas'];	
-			if ( savedCanvas ) {
-				var img = new Image;
-				img.onload = function(){
-					ctx.drawImage(img,0,0); // Or at whatever offset you like
-				};
-				img.src = savedCanvas;
-			}	
+			drawFromLocalStorage();
 		}
 
 
@@ -211,9 +204,21 @@ $(function(){
 		ctx.clearRect(0, 0, DOM.$canvas.width(), DOM.$canvas.height());	
 		
 		if ( background && background != 'erase') {
+			windowCanvas.background = background;
 			ctx.fillStyle = background;
 			ctx.fillRect(0,0,DOM.$canvas.width(),DOM.$canvas.height());
 		}
+	};
+	
+	var drawFromLocalStorage = function() {
+		var savedCanvas = localStorage['savedCanvas'];	
+		if ( savedCanvas ) {
+			var img = new Image;
+			img.onload = function(){
+				ctx.drawImage(img,0,0); // Or at whatever offset you like
+			};
+			img.src = savedCanvas;
+		}	
 	};
 	
 	var saveToLocalStorage = function() {
@@ -341,6 +346,42 @@ $(function(){
 	DOM.$clearBG.click(function(){
 		resetCanvas( pixel.color );
 		saveToLocalStorage();
+	});
+	
+	// canvas window size changes
+	DOM.$window.resize(function(){
+		if ( DOM.$window.width() <= windowCanvas.width && DOM.$window.height() <= windowCanvas.height ) {
+			return;
+		}
+		else {
+			// if local storage
+			if ( !canStorage() || saveMode.on ) {
+				return;
+			}
+			else {
+				console.log('resize');
+				var newWidth = DOM.$window.width();
+				var newHeight = DOM.$window.height();;
+				windowCanvas.width = newWidth;
+				windowCanvas.height = newHeight;
+				
+				// save image
+				saveToLocalStorage();
+			
+				DOM.$canvas
+					.attr('width',newWidth)
+					.attr('height',newHeight)
+				DOM.$overlay
+					.attr('width',newWidth)
+					.attr('height',newHeight);
+				ctxOverlay = DOM.$overlay[0].getContext("2d");
+				ctxOverlay.fillStyle = 'rgba(0,0,0,.5)';
+				
+				// draw image
+				drawFromLocalStorage();
+			} 
+			
+		}
 	});
 	
 	// choose color
