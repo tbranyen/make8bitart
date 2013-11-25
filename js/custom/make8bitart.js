@@ -334,7 +334,7 @@ $(function(){
 		DOM.$draggydivs.mouseup(function(){
 			DOM.$canvas.off('mousemove');
 		});
-	}(25));
+	}(15));
 	
 	
 

@@ -12,7 +12,7 @@
 	
 	<div id="size" class="inner">
 		<h3>pixel size</h3>
-		<input id="size-slider" type="number" min="1" max="100" step="1" value="25" /> <div class="tip"> ? <span class="tip-text">changing pixel size *won't* clear the whole page, but using different sized pixels makes it less "8-bit"ish. you do you, though. I'm not the 8-bit police.</span></div>
+		<input id="size-slider" type="number" min="1" max="100" step="1" value="15" /> <div class="tip"> ? <span class="tip-text">changing pixel size *won't* clear the whole page, but using different sized pixels makes it less "8-bit"ish. you do you, though. I'm not the 8-bit police.</span></div>
 		<div id="pixel-size-demo" class="color-demo"> </div>
 	</div>
 	
