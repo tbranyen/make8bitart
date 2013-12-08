@@ -29,7 +29,7 @@
 <head>
 	<title>make 8-bit art!</title>
 	<link rel="stylesheet" href="css/libs/draggybits.css" />
-	<link rel="stylesheet" href="css/custom/style.css" />
+	<link rel="stylesheet" href="css/custom/make8bitart.css" />
 	<link rel="icon" href="assets/customcolors.png" />
 </head>
 
@@ -65,7 +65,7 @@
 	<div id="header" class="draggy">
 	
 		<div class="controls">
-			<img class="ui-dragger" src="assets/draggybits/dragger.png">	
+			<img class="ui-dragger" src="assets/draggybits/dragger2.png">	
 		</div>
 	
 		<h1>make 8-bit art</h1>
@@ -98,7 +98,7 @@
 	<div id="toolbox" class="draggy">
 
 		<div class="controls">
-			<img class="ui-dragger" src="assets/draggybits/dragger.png">	
+			<img class="ui-dragger" src="assets/draggybits/dragger2.png">	
 		</div>
 		
 		<div id="clear" class="inner">
@@ -110,8 +110,9 @@
 		
 		<div id="size" class="inner">
 			<h3>pixel size</h3>
-			<input id="pixel-size" type="number" min="1" max="100" step="1" value="15" /> 
+			<input id="pixel-size" class="pixel-size-input" type="number" min="1" max="100" step="1" value="15" />
 			<div class="tip"> ? <span class="tip-text">changing pixel size *won't* clear the whole page, but using different sized pixels makes it less "8-bit"ish. you do you, though. I'm not the 8-bit police.</span></div>
+			<input id="pixel-size-slider" class="pixel-size-input" type="range" min="1" max="100" step="1" value="15" />
 			<div id="pixel-size-demo" class="color-demo"> </div>
 		</div>
 		
@@ -161,7 +162,7 @@
 	<div id="colorbox" class="draggy">
 
 		<div class="controls">
-			<img class="ui-dragger" src="assets/draggybits/dragger.png">	
+			<img class="ui-dragger" src="assets/draggybits/dragger2.png">	
 		</div>
 		
 		<div id="color" class="inner clearfix">
@@ -177,16 +178,16 @@
 			<a class="button color primary white" title="white" /> </a>
 			<a class="button color favorite" title="jenn's pick" /> </a>
 			<a class="button color transparent" title="erase" /> </a>
-			<a class="button color custom" title="custom" /> </a>
+			<a class="button color custom" title="custom" /></a>
 		</div>
 		
 		<div id="colorpicker">
 			<h3>hex value:</h3>
 			<p>#<input id="hex-color" type="text" value="000000" /> <a href="#" title="color dropper"><img id="color-dropper" src="assets/dropper.png" alt="dropper"></a></p>
 			
-			<h3>click to pick:</h3>
-			<img id="8bitcolors" src="assets/customcolors.png" />
-			<div class="color-demo"></div>
+			<h3 class="eightbit">click to pick:</h3>
+			<img class="eightbit" id="8bitcolors" src="assets/customcolors.png" />
+			<div class="color-demo eightbit"></div>
 		</div>
 	
 	</div>

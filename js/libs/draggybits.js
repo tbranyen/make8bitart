@@ -31,16 +31,21 @@
 			
 				var $this = $(this).addClass(pluginName).click(onDraggyClick);
 				var $dragger = $this.find('.' + draggerClass);
-				var $closer = $this.find('.' + closerClass).click(onCloseClick);
-				var $minimizer = $this.find('.' + minimizeClass).click(onMinimizeClick);
+				//var $closer = $this.find('.' + closerClass).click(onCloseClick);
+				//var $minimizer = $this.find('.' + minimizeClass).click(onMinimizeClick);
+				
+				// touch
+				$this[0].addEventListener('touchstart', onDraggyClick, false);
+				//$closer[0].addEventListener('touchstart', onCloseClick, false);
+				//$minimizer[0].addEventListener('touchstart', onMinimizeClick, false);
 
 				var options = $.extend(defaults, opts);
 
 				var data = {
 					$this : $this,
 					$dragger : $dragger,
-					$closer : $closer,
-					$minimizer : $minimizer,
+					//$closer : $closer,
+					//$minimizer : $minimizer,
 					onMinimize : options.onMinimize,
 					onClose : options.onClose,
 					onInit : options.onInit,
@@ -123,6 +128,9 @@
 
 		$window.off('mousemove');
 		isMoving = false;
+		
+		// touch
+		window.removeEventListener('touchmove', onMove, false);
 	};
 
 	var onMouseDown = function(e) {
@@ -139,8 +147,10 @@
 
 		$current = $this.parents('.'+ pluginName).css("z-index", zIndex).addClass(movingClass);
 		$window.on('mousemove', onMove);
-
 		isMoving = true;
+		
+		// touch
+		window.addEventListener('touchmove', onMove, false);
 	};
 
 	var onCloseClick = function(e) {
@@ -169,5 +179,9 @@
 	/*** GLOBAL EVENTS ***/
 
 	$(window).mousedown(onMouseDown).mouseup(onMouseUp);
+	
+	// touch
+	window.addEventListener('touchstart', onMouseDown, false);
+	window.addEventListener('touchend', onMouseUp, false);
 
 })( jQuery );

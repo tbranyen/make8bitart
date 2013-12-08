@@ -25,7 +25,7 @@ $(function(){
 		$buttonSaveFull : $('#save-full'),
 		$buttonSaveSelection : $('#save-selection'),
 		
-		$pixelSizeInput : $('#pixel-size'),
+		$pixelSizeInput : $('.pixel-size-input'),
 		$pixelSizeDemoDiv : $('#pixel-size-demo'),
 		
 		$draggydivs : $('.draggy'),
@@ -36,7 +36,9 @@ $(function(){
 	var mode = {
 		dropper : false,
 		drawing : false,
-		save : false
+		save : false,
+		fill : false,
+		trill : true
 	};
 
 	var windowCanvas = {
@@ -76,7 +78,7 @@ $(function(){
         divClass : 'clearfix',
     });
     
-    DOM.$colorPicker.slideUp();
+    DOM.$colorPicker;
     DOM.$colorPickerPixels = $('.pixelDiv-pixel');
 
 	
@@ -149,14 +151,8 @@ $(function(){
 	};
 
 	var drawPixel = function(e) {
-		if (e.pageX != undefined && e.pageY != undefined) {
-			xPos = e.pageX;
-			yPos = e.pageY;
-	    }
-	    else {
-			xPos = e.clientX;
-			yPos = e.clientY;
-	    }
+		xPos = e.pageX;
+		yPos = e.pageY;
 	
 		ctx.beginPath();  
 	    xPos = ( Math.ceil(xPos/pixel.size) * pixel.size ) - pixel.size;
@@ -184,7 +180,7 @@ $(function(){
 	}
 	
 	var drawFromLocalStorage = function() {
-		var savedCanvas = localStorage['savedCanvas'];	
+		var savedCanvas = localStorage['make8bitartSavedCanvas'];	
 		if ( savedCanvas ) {
 			var img = new Image;
 			img.onload = function(){
@@ -253,7 +249,7 @@ $(function(){
 	var saveToLocalStorage = function() {
 		if ( canStorage() ) {
 			savedCanvas = DOM.$canvas[0].toDataURL("image/png");
-			localStorage['savedCanvas'] = savedCanvas;
+			localStorage['make8bitartSavedCanvas'] = savedCanvas;
 		}
 	};
 	
@@ -314,6 +310,9 @@ $(function(){
 			drawPixel(e);
 			DOM.$canvas.on('mousemove', drawPixel);
 			mode.drawing = true;
+			
+			// touch
+			DOM.$canvas[0].addEventListener('touchmove', drawPixel, false);
 		}
 		else {
 			// overlay stuff
@@ -321,7 +320,10 @@ $(function(){
 			startSaveSelection(e);	
 			rect.startX = e.pageX - this.offsetLeft;
 			rect.startY = e.pageY - this.offsetTop;
-			DOM.$overlay.on('mousemove', drawSelection);		
+			DOM.$overlay.on('mousemove', drawSelection);
+			
+			// touch
+			DOM.$overlay[0].addEventListener('touchmove', drawSelection, false);
 		}
 	};
 	
@@ -353,6 +355,9 @@ $(function(){
 			'width' : pixel.size,
 			'height': pixel.size
 		});
+		
+		// set both inputs to be equal
+		DOM.$pixelSizeInput.val(pixel.size);
 	});
 	
 	// reset canvas 
@@ -389,7 +394,6 @@ $(function(){
 	
 	// choose color
 	DOM.$color.click(function(){
-		DOM.$colorPicker.slideUp();
 		
 		var $newColor = $(this);
 		
@@ -542,6 +546,12 @@ $(function(){
 		
 		DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
 		DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
+		
+		//touch
+		DOM.$canvas[0].addEventListener('touchstart', onMouseDown, false);
+		DOM.$canvas[0].addEventListener('touchend', onMouseUp, false);
+		DOM.$overlay[0].addEventListener('touchstart', onMouseDown, false);
+		DOM.$overlay[0].addEventListener('touchend', onMouseUp, false);
 	}(15));
 
 });
