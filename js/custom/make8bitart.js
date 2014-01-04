@@ -3,7 +3,7 @@ $(function(){
 	/*** VARIABULLS ***/
 
 	var colorJennsPick = $('.button.color.favorite').css('background-color');
-	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection, rect;
+	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection, rect, historyPointer;
 	var history = [];
 
 	var DOM = {
@@ -32,6 +32,9 @@ $(function(){
 		$draggydivs : $('.draggy'),
 		$tips : $('.tip'),		
 		$saveInstruction : $('.instructions').slideUp(),
+		
+		$undo : $('#undo'),
+		$redo : $('#redo')
 	};
 	
 	var mode = {
@@ -41,6 +44,11 @@ $(function(){
 		fill : false,
 		trill : true
 	};
+	
+	var action = {
+		draw : "draw",
+		fill : "fill",
+	}
 
 	var windowCanvas = {
 		height: DOM.$window.height(),
@@ -59,7 +67,7 @@ $(function(){
 	};
 	
 	var pixel = {
-		color: 'rgb(00,00,00)',
+		color: 'rgb(0, 0, 0)',
 	};
 
 	
@@ -133,9 +141,10 @@ $(function(){
 	};
 	
 	var resetCanvas = function(background) {
+		// todo - add alert because this can't be undone
 		ctx.clearRect(0, 0, DOM.$canvas.width(), DOM.$canvas.height());	
 		
-		if ( background && background != 'erase') {
+		if ( background && background != 'rgb(0, 0, 0, 0)') {
 			windowCanvas.background = background;
 			ctx.fillStyle = background;
 			ctx.fillRect(0,0,DOM.$canvas.width(),DOM.$canvas.height());
@@ -151,26 +160,20 @@ $(function(){
 		DOM.$pixelSizeInput.val(pixel.size);
 	};
 
-	var drawPixel = function(x, y, color) {
-		xPos = x;
-		yPos = y;
-	
+	var drawPixel = function(xPos, yPos, color) {
 		ctx.beginPath();  
 	    xPos = ( Math.ceil(xPos/pixel.size) * pixel.size ) - pixel.size;
 	    yPos = ( Math.ceil(yPos/pixel.size) * pixel.size ) - pixel.size;
 		ctx.moveTo (xPos, yPos);          
 		ctx.fillStyle = color;
 		ctx.lineHeight = 0;
-
-		if ( pixel.color == 'erase' ) {
+		
+		if ( color == 'rgb(0, 0, 0, 0)' ) {
 			ctx.clearRect(xPos,yPos,pixel.size,pixel.size);
 		}
 		else {
 			ctx.fillRect(xPos,yPos,pixel.size,pixel.size);
 		}
-		
-		// push to history
-		history.push
 		
 	};
 	
@@ -193,6 +196,30 @@ $(function(){
 			};
 			img.src = savedCanvas;
 		}	
+	};
+	
+	var pushToHistory = function( actionType, x, y, rgbOriginal, rgbNew) {
+		// push to history
+		history.push({
+			action : actionType,
+			xPos : x,
+			yPos : y,
+			originalColor : rgbOriginal,
+			newColor : rgbNew
+		});
+		historyPointer++;
+		DOM.$undo.removeAttr('disabled');
+	};
+
+	var undoRedo = function(pointer, undoFlag) {
+
+		if ( undoFlag ) {
+		    var undoRedoColor = history[pointer].originalColor;
+		}
+		else {
+			var undoRedoColor = history[pointer].newColor;
+		}
+		drawPixel(history[pointer].xPos, history[pointer].yPos, undoRedoColor);
 	};
 
 	
@@ -303,21 +330,61 @@ $(function(){
 	var onMouseDown = function(e) {
 		e.preventDefault();
 		
+		var origData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+		var origRGB = 'rgb(' + origData[0] + ', ' + origData[1] + ', ' + origData[2] + ')';
+		
+		if ( origData[3] == 0 ) {
+			origRGB = 'rgb(' + origData[0] + ', ' + origData[1] + ', ' + origData[2] + ', ' + origData[3] + ')';
+		}
+		
+			
 		if ( mode.dropper ) {
-			var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
-			var hoverRGB = 'rgb(' + hoverData[0] + ',' + hoverData[1] + ',' + hoverData[2] + ')';
 			mode.dropper = false;
-			setDropperColor( hoverRGB )
+			setDropperColor( origRGB )
 			DOM.$canvas.removeClass('dropper-mode');
 			DOM.$dropper.removeClass('current').removeAttr('style');
 		}
 		else if ( !mode.save ) {
-			drawPixel(e.pageX, e.pageY, pixel.color);
-			DOM.$canvas.on('mousemove', function(e){drawPixel(e.pageX, e.pageY, pixel.color)});
+			
 			mode.drawing = true;
 			
+			// reset history
+			history = history.slice(0, historyPointer+1);
+			DOM.$redo.attr('disabled','disabled');
+
+				drawPixel(e.pageX, e.pageY, pixel.color);
+
+			if ( origRGB != pixel.color ) {
+				pushToHistory(action.draw, e.pageX, e.pageY, origRGB, pixel.color);			
+			}
+			
+			DOM.$canvas.on('mousemove', function(e){
+				var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+				var hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ')';
+				if ( hoverData[3] == 0 ) {
+					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
+				}
+		
+				if ( hoverRGB != pixel.color ) {
+					drawPixel(e.pageX, e.pageY, pixel.color);
+					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
+				}
+			});
+			
 			// touch
-			DOM.$canvas[0].addEventListener('touchmove', function(e){drawPixel(e.pageX, e.pageY, pixel.color)}, false);
+			DOM.$canvas[0].addEventListener('touchmove', function(e){
+				var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+				var hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ')';
+				if ( hoverData[3] == 0 ) {
+					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
+				}
+		
+				if ( hoverRGB != pixel.color ) {
+					drawPixel(e.pageX, e.pageY, pixel.color);
+					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
+				}
+			}, false);
+			
 		}
 		else {
 			// overlay stuff
@@ -394,6 +461,27 @@ $(function(){
 		}
 	});
 	
+	// undo
+	DOM.$undo.click(function(){
+		undoRedo(historyPointer, true);
+		historyPointer--;
+		
+		DOM.$redo.removeAttr('disabled');		
+		if ( historyPointer < 0 ) {
+			DOM.$undo.attr('disabled', 'disabled');
+		}
+	});
+	
+	// redo
+	DOM.$redo.click(function(){
+		historyPointer++;
+		undoRedo(historyPointer, false);
+		
+		DOM.$undo.removeAttr('disabled');
+		if ( historyPointer == history.length - 1 ) {
+		    DOM.$redo.attr('disabled', 'disabled');
+		}
+	});
 	
 	/* colors */
 	
@@ -406,14 +494,14 @@ $(function(){
 			var newColorLabel = colorJennsPick;
 		}
 		else {
-			var newColorLabel = $newColor.attr('title');
+			var newColorLabel = $newColor.attr('data-color');
 		}
 		
 		$('.current').removeClass('current');
 		$newColor.addClass('current');
 		pixel.color = newColorLabel;
 
-		if ( pixel.color != 'erase' ) {
+		if ( pixel.color != 'rgb(0, 0, 0, 0)' ) {
 			var demoColor = pixel.color;
 			DOM.$pixelSizeDemoDiv.css('background-image', 'none');
 			DOM.$colorPickerDemo.css('background-image', 'none');
@@ -516,7 +604,6 @@ $(function(){
 				return;
 			}
 			else {
-				console.log('resize');
 				var newWidth = DOM.$window.width();
 				var newHeight = DOM.$window.height();;
 				windowCanvas.width = newWidth;
@@ -548,6 +635,8 @@ $(function(){
 	var init = (function(size){
 		generateCanvas();
 		initpixel(size);
+		
+		historyPointer = -1;
 		
 		DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
 		DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);

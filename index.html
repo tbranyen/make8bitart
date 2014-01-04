@@ -104,6 +104,9 @@
 		
 		<div id="clear" class="inner">
 			<h3>canvas tools</h3>
+			
+			<input type="submit" id="undo" value="undo" disabled="disabled" />
+			<input type="submit" id="redo" value="redo" disabled="disabled" />
 	
 			<input type="submit" value="new canvas" id="new-canvas" /> 
 			<div class="tip"> ? <span class="tip-text">this will clear your canvas and create a new one with the background of whichever color is selected, including "erase" for a transparent one</span></div>
@@ -168,17 +171,17 @@
 		
 		<div id="color" class="inner clearfix">
 			<h3>pick a color:</h3>
-			<a class="button color primary red" title="red" /> </a>
-			<a class="button color primary orange" title="orange" /> </a>
-			<a class="button color primary yellow" title="yellow" /> </a>
-			<a class="button color primary green" title="green" /> </a>
-			<a class="button color primary blue" title="blue" /> </a>
-			<a class="button color primary purple" title="purple" /> </a>
-			<a class="button color primary black" title="black" /> </a>
-			<a class="button color primary gray" title="gray" /> </a>
-			<a class="button color primary white" title="white" /> </a>
+			<a class="button color primary red" title="red" data-color="rgb(255, 0, 0)" /> </a>
+			<a class="button color primary orange" title="orange" data-color="rgb(255, 165, 0)" /> </a>
+			<a class="button color primary yellow" title="yellow" data-color="rgb(255, 255, 0)" /> </a>
+			<a class="button color primary green" title="green" data-color="rgb(0, 128, 0)" /> </a>
+			<a class="button color primary blue" title="blue" data-color="rgb(0, 0, 255)" /> </a>
+			<a class="button color primary purple" title="purple" data-color="rgb(128, 0, 128)" /> </a>
+			<a class="button color primary black" title="black" data-color="rgb(0, 0, 0)" /> </a>
+			<a class="button color primary gray" title="gray" data-color="rgb(128, 128, 128)" /> </a>
+			<a class="button color primary white" title="white" data-color="rgb(255, 255, 255)" /> </a>
 			<a class="button color favorite" title="jenn's pick" /> </a>
-			<a class="button color transparent" title="erase" /> </a>
+			<a class="button color transparent" title="erase" data-color="rgb(0, 0, 0, 0)" /> </a>
 			<a class="button color custom" title="custom" /></a>
 		</div>
 		

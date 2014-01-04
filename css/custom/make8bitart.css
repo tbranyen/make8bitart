@@ -38,6 +38,7 @@ h2 a { color: blue; font-size: 1.2em;}
 
 /* canvas tools box */
 #toolbox { width: 145px; }
+#pixel-size { width: 75%; }
 #pixel-size-demo { background: black; margin:3px; }
 ul.instructions { padding: 0 0 0 20px; }
 
