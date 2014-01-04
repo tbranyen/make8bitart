@@ -141,13 +141,21 @@ $(function(){
 	};
 	
 	var resetCanvas = function(background) {
-		// todo - add alert because this can't be undone
-		ctx.clearRect(0, 0, DOM.$canvas.width(), DOM.$canvas.height());	
 		
-		if ( background && background != 'rgb(0, 0, 0, 0)') {
-			windowCanvas.background = background;
-			ctx.fillStyle = background;
-			ctx.fillRect(0,0,DOM.$canvas.width(),DOM.$canvas.height());
+		if ( window.confirm('You cannot undo canvas resets. Are you sure you want to erase this entire drawing?') ) {
+			ctx.clearRect(0, 0, DOM.$canvas.width(), DOM.$canvas.height());	
+			
+			if ( background && background != 'rgb(0, 0, 0, 0)') {
+				windowCanvas.background = background;
+				ctx.fillStyle = background;
+				ctx.fillRect(0,0,DOM.$canvas.width(),DOM.$canvas.height());
+			}
+			
+			// reset history
+			history = [];
+			historyPointer = -1;
+			DOM.$redo.attr('disabled', 'disabled');
+			DOM.$undo.attr('disabled', 'disabled');
 		}
 	};
 	
@@ -289,6 +297,10 @@ $(function(){
 	/* colors */
 	
 	var rgbToHex = function( rgb ) {
+		if ( rgb.charAt(0) == '#' ) {
+			return rgb.slice(1,7); 
+		}
+		
         var rgbArray = rgb.substr(4, rgb.length - 5).split(',');
         var hex = "";
         for ( var i = 0; i <= 2; i++ ) {
@@ -364,8 +376,11 @@ $(function(){
 				if ( hoverData[3] == 0 ) {
 					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
 				}
-		
-				if ( hoverRGB != pixel.color ) {
+				
+				// todo - gotta be a better way
+				if ( rgbToHex(hoverRGB) != rgbToHex(pixel.color) || 
+						( hoverRGB == 'rgb(0, 0, 0, 0)' && ( pixel.color == 'rgb(0, 0, 0)' || pixel.color == '#000000') ) || 
+						( (hoverRGB == 'rgb(0, 0, 0)' || hoverRGB == '#000000') && pixel.color == 'rgb(0, 0, 0, 0)' ) ) {
 					drawPixel(e.pageX, e.pageY, pixel.color);
 					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
 				}
