@@ -4,6 +4,7 @@ $(function(){
 
 	var colorJennsPick = $('.button.color.favorite').css('background-color');
 	var ctx, leftSide, topSide, xPos, yPos, resetSelectStart, saveSelection, rect;
+	var history = [];
 
 	var DOM = {
 		$window : $(window),
@@ -150,15 +151,15 @@ $(function(){
 		DOM.$pixelSizeInput.val(pixel.size);
 	};
 
-	var drawPixel = function(e) {
-		xPos = e.pageX;
-		yPos = e.pageY;
+	var drawPixel = function(x, y, color) {
+		xPos = x;
+		yPos = y;
 	
 		ctx.beginPath();  
 	    xPos = ( Math.ceil(xPos/pixel.size) * pixel.size ) - pixel.size;
 	    yPos = ( Math.ceil(yPos/pixel.size) * pixel.size ) - pixel.size;
 		ctx.moveTo (xPos, yPos);          
-		ctx.fillStyle = pixel.color;
+		ctx.fillStyle = color;
 		ctx.lineHeight = 0;
 
 		if ( pixel.color == 'erase' ) {
@@ -167,9 +168,13 @@ $(function(){
 		else {
 			ctx.fillRect(xPos,yPos,pixel.size,pixel.size);
 		}
-
-	};
 		
+		// push to history
+		history.push
+		
+	};
+	
+
 	var canStorage = function() {
 		try {
 			return 'localStorage' in window && window['localStorage'] !== null;
@@ -307,12 +312,12 @@ $(function(){
 			DOM.$dropper.removeClass('current').removeAttr('style');
 		}
 		else if ( !mode.save ) {
-			drawPixel(e);
-			DOM.$canvas.on('mousemove', drawPixel);
+			drawPixel(e.pageX, e.pageY, pixel.color);
+			DOM.$canvas.on('mousemove', function(e){drawPixel(e.pageX, e.pageY, pixel.color)});
 			mode.drawing = true;
 			
 			// touch
-			DOM.$canvas[0].addEventListener('touchmove', drawPixel, false);
+			DOM.$canvas[0].addEventListener('touchmove', function(e){drawPixel(e.pageX, e.pageY, pixel.color)}, false);
 		}
 		else {
 			// overlay stuff
