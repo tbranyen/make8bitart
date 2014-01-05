@@ -11,6 +11,7 @@ $(function(){
 		$body : $('body'),
 		
 		$header : $('#header'),
+		$credits : $('#credits'),
 		$toolbox : $('#toolbox'),
 		$savebox : $('#savebox'),
 		$colorbox : $('#colorbox'),
@@ -29,6 +30,7 @@ $(function(){
 		$pixelSizeInput : $('.pixel-size-input'),
 		$pixelSizeDemoDiv : $('#pixel-size-demo'),
 		
+		$minimizedToolsList : $('#minimized-tools-list'),
 		$draggydivs : $('.draggy'),
 		$tips : $('.tip'),		
 		$saveInstruction : $('.instructions').slideUp(),
@@ -72,9 +74,19 @@ $(function(){
 
 	
 	/*** OUTSIDE LIBRARY STUFF - DRAGGYDIVS & PIXELDIV***/
-	
-	DOM.$draggydivs.draggyBits();
-	
+	var onMinimizeToolsListClick = function (e) {
+			var $this = $(this);
+			var $elm = $this.data("draggy");
+			$elm.draggyBits('restore');
+			$this.parent().remove();
+	};
+	var onMinimize = function ($elm) {
+		var $a = $("<a>").html($elm.attr("title")).on('click', onMinimizeToolsListClick).data("draggy", $elm);
+		$('<li></li>').append($a).appendTo(DOM.$minimizedToolsList)
+	};
+	DOM.$draggydivs.draggyBits({onMinimize:onMinimize});
+
+
 	// if mouse up is on toolboxes, don't keep drawing
 	DOM.$draggydivs.mouseup(function(){
 		DOM.$canvas.off('mousemove');
@@ -98,17 +110,21 @@ $(function(){
 		'left': '200px',
 		'top' : '20px'
 	});
+	DOM.$credits.css({
+		'left' : '480px',
+		'top' : '120px'	
+	});
 	DOM.$toolbox.css({
 		'left' : '30px',
-		'top' : '200px'
+		'top' : '120px'
 	});
 	DOM.$colorbox.css({
-		'left' : '600px',
-		'top' : '100px'
+		'left' : '750px',
+		'top' : '50px'
 	});
-	
 
 	
+
 	/*** FUNCTIONS WOWOWOW ***/
 	
 	/* canvas & drawing */
@@ -393,8 +409,11 @@ $(function(){
 				if ( hoverData[3] == 0 ) {
 					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
 				}
-		
-				if ( hoverRGB != pixel.color ) {
+				
+				// todo - gotta be a better way
+				if ( rgbToHex(hoverRGB) != rgbToHex(pixel.color) || 
+						( hoverRGB == 'rgb(0, 0, 0, 0)' && ( pixel.color == 'rgb(0, 0, 0)' || pixel.color == '#000000') ) || 
+						( (hoverRGB == 'rgb(0, 0, 0)' || hoverRGB == '#000000') && pixel.color == 'rgb(0, 0, 0, 0)' ) ) {
 					drawPixel(e.pageX, e.pageY, pixel.color);
 					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
 				}

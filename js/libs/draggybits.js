@@ -8,7 +8,7 @@
     var hiddenClass = 'ui-hidden';
 
     var isMoving = false;
-	var zIndex = 5;
+	var zIndex = 100;
 	var pos = { x:0, y:0 };
 	var numDraggers = 0;
 	var tileOffset = { x:20, y:20};
@@ -17,10 +17,10 @@
 	var $window = $(window);
 
 	var defaults = {
-		onMinimize : function(e) { return false; },
-		onInit : function(e) { return false; },
-		onClose : function(e) { return false; },
-		onRestore : function(e) { return false; }
+		onMinimize : function (e) { return false; },
+		onInit : function (e) { return false; },
+		onClose : function (e) { return false; },
+		onRestore : function (e) { return false; }
 	};
 
 	var methods = {
@@ -29,23 +29,18 @@
 			
 			return this.each(function() {	  
 			
-				var $this = $(this).addClass(pluginName).click(onDraggyClick);
+				var $this = $(this).addClass(pluginName);
 				var $dragger = $this.find('.' + draggerClass);
-				//var $closer = $this.find('.' + closerClass).click(onCloseClick);
-				//var $minimizer = $this.find('.' + minimizeClass).click(onMinimizeClick);
-				
-				// touch
-				$this[0].addEventListener('touchstart', onDraggyClick, false);
-				//$closer[0].addEventListener('touchstart', onCloseClick, false);
-				//$minimizer[0].addEventListener('touchstart', onMinimizeClick, false);
+				var $closer = $this.find('.' + closerClass).click(onCloseClick);
+				var $minimizer = $this.find('.' + minimizeClass).click(onMinimizeClick);
 
 				var options = $.extend(defaults, opts);
 
 				var data = {
 					$this : $this,
 					$dragger : $dragger,
-					//$closer : $closer,
-					//$minimizer : $minimizer,
+					$closer : $closer,
+					$minimizer : $minimizer,
 					onMinimize : options.onMinimize,
 					onClose : options.onClose,
 					onInit : options.onInit,
@@ -53,10 +48,12 @@
 				};
 
 				$this.data(pluginName, data);
-				
+
 				numDraggers++;
 
 				var css = {
+					top : numDraggers * tileOffset.y,
+					left : 200 + (numDraggers * tileOffset.x),
 					position : 'absolute'
 				};
 
@@ -69,7 +66,6 @@
 		minimize : function () {
 			var $this = $(this).addClass(hiddenClass);
 			var data = $this.data(pluginName);
-			console.log(data);
 			data.onMinimize($this);
 		},
 
@@ -108,7 +104,7 @@
 
     /*** EVENTS HANDLERS ***/
 
-	var onMove = function(e) {
+	var onMove = function (e) {
 		var curr = { x: e.pageX, y: e.pageY };
 
 		var dx = curr.x - pos.x;
@@ -119,7 +115,7 @@
 		pos = curr;
 	};
 
-	var onMouseUp = function(e) {
+	var onMouseUp = function (e) {
 		if (!isMoving) {
 			return;
 		}
@@ -133,7 +129,7 @@
 		window.removeEventListener('touchmove', onMove, false);
 	};
 
-	var onMouseDown = function(e) {
+	var onMouseDown = function (e) {
 		var $this = $(e.target);
 		var isDragger = $this.hasClass(draggerClass);
 
@@ -141,40 +137,30 @@
 			return;
 		}
 
-		e.preventDefault();
+		e.preventDefault()
 		pos = { x: e.pageX, y: e.pageY };
 		zIndex++;
 
 		$current = $this.parents('.'+ pluginName).css("z-index", zIndex).addClass(movingClass);
 		$window.on('mousemove', onMove);
+
 		isMoving = true;
 		
 		// touch
 		window.addEventListener('touchmove', onMove, false);
 	};
 
-	var onCloseClick = function(e) {
+	var onCloseClick = function (e) {
 		var $this = $(this);
 		var $par = $this.parents('.'+ pluginName);
 			$par[pluginName]('close');
 	};
 
-	var onMinimizeClick = function(e) {
+	var onMinimizeClick = function (e) {
 		var $this = $(this);
 		var $par = $this.parents('.'+ pluginName);
 			$par[pluginName]('minimize');
 	};
-	
-	var onDraggyClick = function(e) {
-		var $this = $(this);
-		if ( $this.css('z-index') == 'auto' ) {
-			$this.css('z-index',zIndex);
-		}
-		$current = $this.css('z-index', zIndex);
-		zIndex++;
-	};
-	
-	
 
 	/*** GLOBAL EVENTS ***/
 
