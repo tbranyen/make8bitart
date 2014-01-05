@@ -479,6 +479,19 @@ $(function(){
 			DOM.$overlay.show();
 		}
 	});
+
+  // ensure elements are enabled before triggering a click event
+  var triggerClickForEnabled = function(elem) {
+    return function() {
+      // no-op if there is nothing to undo
+      if (elem.is(":disabled")) {
+        return;
+      }
+
+      // trigger the click
+      elem.trigger('click');
+    };
+  };
 	
 	// undo
 	DOM.$undo.click(function(){
@@ -490,6 +503,9 @@ $(function(){
 			DOM.$undo.attr('disabled', 'disabled');
 		}
 	});
+
+  // alias to ctrl+z
+  key('ctrl+z', triggerClickForEnabled(DOM.$undo));
 	
 	// redo
 	DOM.$redo.click(function(){
@@ -501,6 +517,9 @@ $(function(){
 		    DOM.$redo.attr('disabled', 'disabled');
 		}
 	});
+
+  // alias to ctrl+y
+  key('ctrl+y', triggerClickForEnabled(DOM.$redo));
 	
 	/* colors */
 	
