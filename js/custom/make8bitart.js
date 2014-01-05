@@ -670,7 +670,7 @@ $(function(){
 	
 	/*** INIT HA HA HA ***/
   generateCanvas();
-  initpixel(size);
+  initpixel(15);
   
   historyPointer = -1;
   
