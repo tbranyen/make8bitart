@@ -650,21 +650,18 @@ $(function(){
 
 	
 	/*** INIT HA HA HA ***/
-	
-	var init = (function(size){
-		generateCanvas();
-		initpixel(size);
-		
-		historyPointer = -1;
-		
-		DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
-		DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
-		
-		//touch
-		DOM.$canvas[0].addEventListener('touchstart', onMouseDown, false);
-		DOM.$canvas[0].addEventListener('touchend', onMouseUp, false);
-		DOM.$overlay[0].addEventListener('touchstart', onMouseDown, false);
-		DOM.$overlay[0].addEventListener('touchend', onMouseUp, false);
-	}(15));
+  generateCanvas();
+  initpixel(size);
+  
+  historyPointer = -1;
+  
+  DOM.$canvas.mousedown(onMouseDown).mouseup(onMouseUp);
+  DOM.$overlay.mousedown(onMouseDown).mouseup(onMouseUp);
+  
+  //touch
+  DOM.$canvas[0].addEventListener('touchstart', onMouseDown, false);
+  DOM.$canvas[0].addEventListener('touchend', onMouseUp, false);
+  DOM.$overlay[0].addEventListener('touchstart', onMouseDown, false);
+  DOM.$overlay[0].addEventListener('touchend', onMouseUp, false);
 
 });
