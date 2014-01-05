@@ -201,6 +201,21 @@ $(function(){
 		
 	};
 	
+	var drawOnMove = function(e) {
+		var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
+		var hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ')';
+		if ( hoverData[3] == 0 ) {
+			hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
+		}
+		
+		if ( rgbToHex(hoverRGB) != rgbToHex(pixel.color) || 
+				( hoverRGB == 'rgb(0, 0, 0, 0)' && ( pixel.color == 'rgb(0, 0, 0)' || pixel.color == '#000000') ) || 
+				( (hoverRGB == 'rgb(0, 0, 0)' || hoverRGB == '#000000') && pixel.color == 'rgb(0, 0, 0, 0)' ) ) {
+			drawPixel(e.pageX, e.pageY, pixel.color);
+			pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
+		}
+	
+	}
 
 	var canStorage = function() {
 		try {
@@ -380,45 +395,15 @@ $(function(){
 			history = history.slice(0, historyPointer+1);
 			DOM.$redo.attr('disabled','disabled');
 
-				drawPixel(e.pageX, e.pageY, pixel.color);
-
+			drawPixel(e.pageX, e.pageY, pixel.color);
 			if ( origRGB != pixel.color ) {
 				pushToHistory(action.draw, e.pageX, e.pageY, origRGB, pixel.color);			
 			}
 			
-			DOM.$canvas.on('mousemove', function(e){
-				var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
-				var hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ')';
-				if ( hoverData[3] == 0 ) {
-					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
-				}
-				
-				// todo - gotta be a better way
-				if ( rgbToHex(hoverRGB) != rgbToHex(pixel.color) || 
-						( hoverRGB == 'rgb(0, 0, 0, 0)' && ( pixel.color == 'rgb(0, 0, 0)' || pixel.color == '#000000') ) || 
-						( (hoverRGB == 'rgb(0, 0, 0)' || hoverRGB == '#000000') && pixel.color == 'rgb(0, 0, 0, 0)' ) ) {
-					drawPixel(e.pageX, e.pageY, pixel.color);
-					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
-				}
-			});
+			DOM.$canvas.on('mousemove', drawOnMove);
 			
 			// touch
-			DOM.$canvas[0].addEventListener('touchmove', function(e){
-				var hoverData = ctx.getImageData( e.pageX, e.pageY, 1, 1).data;
-				var hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ')';
-				if ( hoverData[3] == 0 ) {
-					hoverRGB = 'rgb(' + hoverData[0] + ', ' + hoverData[1] + ', ' + hoverData[2] + ', ' + hoverData[3] + ')';
-				}
-				
-				// todo - gotta be a better way
-				if ( rgbToHex(hoverRGB) != rgbToHex(pixel.color) || 
-						( hoverRGB == 'rgb(0, 0, 0, 0)' && ( pixel.color == 'rgb(0, 0, 0)' || pixel.color == '#000000') ) || 
-						( (hoverRGB == 'rgb(0, 0, 0)' || hoverRGB == '#000000') && pixel.color == 'rgb(0, 0, 0, 0)' ) ) {
-					drawPixel(e.pageX, e.pageY, pixel.color);
-					pushToHistory(action.draw, e.pageX, e.pageY, hoverRGB, pixel.color);
-				}
-			}, false);
-			
+			DOM.$canvas[0].addEventListener('touchmove', drawOnMove, false);
 		}
 		else {
 			// overlay stuff
